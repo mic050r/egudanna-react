@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+
+import React from "react";
+import "./App.css";
+import VideoPlayer from "./components/VideoPlayer";
+import WebcamCapture from "./components/WebcamCapture";
+import CircleButton from "./components/CircleButton";
+import Timer from "./components/Timer";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container">
+      <div className="video-container">
+        <VideoPlayer videoUrl="//www.youtube.com/embed/4rqI5F5Gra8" />
+      </div>
+      <div className="cam-container">
+        <WebcamCapture />
+      </div>
+      <CircleButton />
     </div>
   );
 }
