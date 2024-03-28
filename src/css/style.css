@@ -32,7 +32,9 @@
   transform: translateX(-50%);
 }
 
-.countdown {
+/* style.css */
+
+.timer {
   position: absolute; /* 타이머를 절대 위치 설정. */
   /* 부모 요소의 왼쪽에서 50% 떨어진 위치에 배치 */
   left: 50%;
