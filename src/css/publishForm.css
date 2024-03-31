@@ -59,6 +59,7 @@
   font-size: 16px;
   border: 1px solid #cccccc;
   width: 85%;
+  color: #c65f5f;
 }
 
 #title {
@@ -87,7 +88,7 @@
   outline: none;
 }
 
-.input-group p {
+.email-description {
   font-size: 14px;
   color: #666666;
   margin-top: 5px;

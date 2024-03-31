@@ -32,19 +32,19 @@ function PublishForm({ onCancel, onPublish }) {
         </div>
         <div className="input-group">
           <label htmlFor="nickname" className="input-label">
-            닉네임 입력
+            닉네임
           </label>
           <input
             type="text"
             id="nickname"
             value={nickname}
-            placeholder="닉네임을 입력해주세요."
+            placeholder="ex) 미림여신"
             onChange={(e) => setNickname(e.target.value)}
           />
         </div>
         <div className="input-group">
           <label htmlFor="hashtags" className="input-label">
-            해시태그 추가
+            해시태그
           </label>
           <input
             type="text"
@@ -56,18 +56,19 @@ function PublishForm({ onCancel, onPublish }) {
         </div>
         <div className="input-group">
           <label htmlFor="email" className="input-label">
-            이메일 입력
+            이메일
           </label>
           <input
             type="text"
             id="email"
             value={email}
-            placeholder="이메일을 입력하면 영상을 받을 수 있어요!"
+            placeholder="구글 이메일을 입력해주세요."
             onChange={(e) => setEmail(e.target.value)}
           />
-          <br />
-          <p></p>
         </div>
+        <p className="email-description">
+          **이메일을 입력하면 영상을 받을 수 있어요!
+        </p>
         <div className="button-group">
           <button onClick={onCancel} className="cancel">
             취소
