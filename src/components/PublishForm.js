@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import "../css/publishForm.css";
+import TagInput from "./TagInput"; // 태그 입력 컴포넌트 import
 
 function PublishForm({ onCancel, onPublish }) {
   const [title, setTitle] = useState("");
   const [nickname, setNickname] = useState("");
   const [hashtags, setHashtags] = useState("");
   const [email, setEmail] = useState("");
+  const [tags, setTags] = useState([]);
 
   const handlePublish = () => {
     const data = {
       title,
       nickname,
-      hashtags: hashtags.split(/\s+/), // 공백을 기준으로 해시태그를 분할하여 배열로 저장합니다.
+      hashtags: hashtags.split(/\s+/),
       email,
     };
     onPublish(data);
@@ -46,13 +48,8 @@ function PublishForm({ onCancel, onPublish }) {
           <label htmlFor="hashtags" className="input-label">
             해시태그
           </label>
-          <input
-            type="text"
-            id="hashtags"
-            value={hashtags}
-            placeholder="#태그입력"
-            onChange={(e) => setHashtags(e.target.value)}
-          />
+          <TagInput tags={tags} setTags={setTags} />{" "}
+          {/* TagInput 컴포넌트 사용 */}
         </div>
         <div className="input-group">
           <label htmlFor="email" className="input-label">
