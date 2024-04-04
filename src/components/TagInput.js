@@ -37,7 +37,7 @@ function TagInput({ tags, setTags }) {
               className="deleteButton"
               onClick={() => handleTagDelete(index)}
             >
-              x
+              {/* TODO : X 아이콘 추가하기 */}x
             </span>
           </div>
         ))}
