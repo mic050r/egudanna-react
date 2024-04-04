@@ -1,7 +1,7 @@
 // Timer.js
 
 import React, { useState, useEffect } from "react";
-import "../css/style.css";
+import "../../css/record/recording.css";
 
 function Timer({ initialTime, onFinish }) {
   const [time, setTime] = useState(initialTime);

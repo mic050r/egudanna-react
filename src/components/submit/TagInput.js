@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../css/tag.css";
+import "../../css/record/tag.css";
 
 function TagInput({ tags, setTags }) {
   const [inputText, setInputText] = useState("");

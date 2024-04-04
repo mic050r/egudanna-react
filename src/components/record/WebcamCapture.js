@@ -1,7 +1,7 @@
 // WebcamCapture.js
 
 import React, { useRef, useEffect } from "react";
-import "../css/style.css";
+import "../../css/record/recording.css";
 
 const WebcamCapture = () => {
   const videoRef = useRef();

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../css/publishForm.css";
+import "../../css/record/publishForm.css";
 import TagInput from "./TagInput"; // 태그 입력 컴포넌트 import
 
 function PublishForm({ onCancel, onPublish }) {
