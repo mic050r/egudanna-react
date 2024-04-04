@@ -37,7 +37,7 @@ function App() {
         <WebcamCapture />
       </div>
       <CircleButton onClick={handleButtonClick} />
-      {recording && <Timer initialTime={3} onFinish={handleTimerFinish} />}
+      {recording && <Timer initialTime={1} onFinish={handleTimerFinish} />}
       {showPublishForm && (
         <PublishForm onCancel={handlePublishCancel} onPublish={handlePublish} />
       )}
