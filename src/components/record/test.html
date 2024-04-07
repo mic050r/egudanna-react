@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube Video Recording</title>
+  </head>
+  <body>
+    <!-- YouTube Video Player -->
+    <div id="youtube-player">
+      <!-- YouTube iframe embed code -->
+      <!-- Replace 'VIDEO_ID' with the actual YouTube video ID -->
+      <iframe
+        width="560"
+        height="315"
+        src="//www.youtube.com/embed/4rqI5F5Gra8"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- Start/Stop Recording Button -->
+    <button id="record-button">Start Recording</button>
+
+    <script>
+      // 유튜브 플레이어 객체
+      const youtubePlayer = document.getElementById("youtube-player");
+      const videoElement = youtubePlayer.querySelector("iframe");
+
+      // 녹화 버튼과 상태
+      const recordButton = document.getElementById("record-button");
+      let isRecording = false;
+
+      // 녹화 관련 변수
+      let mediaRecorder;
+      let recordedChunks = [];
+
+      // 음악 종료 감지 함수
+      function watchSongEnd() {
+        // 유튜브 플레이어에서 재생이 끝나면 녹화 중지
+        videoElement.addEventListener("ended", () => {
+          if (isRecording) {
+            stopRecording();
+          }
+        });
+      }
+
+      // 모니터 캡처 및 녹화 시작 함수
+      async function startRecording() {
+        // 모니터 캡처
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+          audio: true,
+        });
+
+        // 미디어 녹화 시작
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = function (event) {
+          recordedChunks.push(event.data);
+        };
+        mediaRecorder.onstop = function () {
+          // 녹화된 데이터를 Blob으로 변환
+          const blob = new Blob(recordedChunks, { type: "video/webm" });
+
+          // Blob을 URL로 변환하여 다운로드
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "recorded-video.webm";
+          document.body.appendChild(a);
+          a.click();
+        };
+        mediaRecorder.start();
+
+        isRecording = true;
+        recordButton.textContent = "Stop Recording";
+      }
+
+      // 녹화 중지 함수
+      function stopRecording() {
+        mediaRecorder.stop();
+        isRecording = false;
+        recordButton.textContent = "Start Recording";
+      }
+
+      // 녹화 버튼 클릭 이벤트 핸들러
+      recordButton.addEventListener("click", () => {
+        if (!isRecording) {
+          startRecording();
+          watchSongEnd(); // 음악 종료 감지 시작
+        } else {
+          stopRecording();
+        }
+      });
+    </script>
+  </body>
+</html>
