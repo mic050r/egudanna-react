@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import "../App.css";
-import YouTube from "react-youtube"; // YouTube API를 사용하기 위한 import
+import YouTube from "react-youtube";
 import WebcamCapture from "../components/record/WebcamCapture";
 import CircleButton from "../components/record/CircleButton";
 import Timer from "../components/record/Timer";
@@ -9,19 +9,22 @@ import PublishForm from "../components/submit/PublishForm";
 function RecordPage() {
   const [recording, setRecording] = useState(false);
   const [showPublishForm, setShowPublishForm] = useState(false);
-  const [player, setPlayer] = useState(null); // YouTube 플레이어의 참조를 저장하기 위한 상태
+  const [player, setPlayer] = useState(null);
+  const [audioStream, setAudioStream] = useState(null);
 
-  const playerRef = useRef(null); // YouTube 플레이어의 참조를 관리하기 위한 useRef
+  const playerRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const recordedChunksRef = useRef([]);
+  const mediaStreamRef = useRef(null);
 
   const handleButtonClick = () => {
     setRecording(true);
-    // CircleButton 클릭 후 3초 뒤에 유튜브 비디오 재생
     setTimeout(() => {
-      setRecording(false);
       if (playerRef.current) {
-        playerRef.current.internalPlayer.playVideo(); // YouTube 플레이어 재생
+        playerRef.current.internalPlayer.playVideo();
       }
-    }, 3000); // 3초를 밀리초 단위로 나타냄
+      startRecording();
+    }, 3000);
   };
 
   const handleTimerFinish = () => {
@@ -38,16 +41,83 @@ function RecordPage() {
   };
 
   const onReady = (event) => {
-    setPlayer(event.target); // YouTube 플레이어의 참조 설정
+    setPlayer(event.target);
+    // internalPlayer가 존재하는지 확인하고 오디오 트랙에 접근합니다.
+    if (
+      event.target.internalPlayer &&
+      event.target.internalPlayer.getAudioTracks
+    ) {
+      const audioTrack = event.target.internalPlayer.getAudioTracks()[0];
+      if (audioTrack) {
+        // YouTube 비디오의 오디오 트랙을 포함한 미디어 스트림을 생성합니다.
+        const audioStream = new MediaStream();
+        audioStream.addTrack(audioTrack);
+        setAudioStream(audioStream);
+      }
+    }
+  };
+
+  const onEnd = () => {
+    stopRecording();
+  };
+
+  const startRecording = async () => {
+    try {
+      const videoStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false, // Disable audio capturing from mic
+      });
+
+      mediaStreamRef.current = new MediaStream();
+      mediaStreamRef.current.addTrack(videoStream.getVideoTracks()[0]);
+
+      if (audioStream) {
+        // Add audio track from YouTube video
+        mediaStreamRef.current.addTrack(audioStream.getAudioTracks()[0]);
+      }
+
+      mediaRecorderRef.current = new MediaRecorder(mediaStreamRef.current);
+      mediaRecorderRef.current.ondataavailable = handleDataAvailable;
+      mediaRecorderRef.current.start();
+    } catch (error) {
+      console.error("Error accessing webcam:", error);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && recording) {
+      mediaRecorderRef.current.stop();
+      setRecording(false);
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+      }
+    }
+  };
+
+  const handleDataAvailable = (event) => {
+    if (event.data.size > 0) {
+      recordedChunksRef.current.push(event.data);
+      downloadVideo();
+    }
+  };
+
+  const downloadVideo = () => {
+    const blob = new Blob(recordedChunksRef.current, { type: "video/webm" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    a.href = url;
+    a.download = "recorded-video.webm";
+    a.click();
+    window.URL.revokeObjectURL(url);
   };
 
   return (
     <div className="app-container">
-      {/* 동영상 컨테이너 */}
       <div className="video-container">
-        {/* YouTube 동영상을 불러오기 위한 YouTube 컴포넌트 */}
         <YouTube
-          videoId="4rqI5F5Gra8"
+          videoId="lkMMCQpUGjY"
           className="video-frame"
           containerClassName="video-container"
           opts={{
@@ -56,28 +126,26 @@ function RecordPage() {
             playerVars: {
               autoplay: 0,
               controls: 0,
+              mute: 0, // Unmute the video
             },
           }}
           onReady={onReady}
-          ref={playerRef} // YouTube 플레이어 참조 설정
+          onEnd={onEnd}
+          ref={playerRef}
         />
       </div>
 
-      {/* 웹캠 캡쳐 컴포넌트 */}
       <div className="cam-container">
         <WebcamCapture />
       </div>
 
-      {/* CircleButton 컴포넌트 */}
       <CircleButton onClick={handleButtonClick} />
 
-      {/* 녹화 중일 때 타이머 컴포넌트 */}
       {recording && <Timer initialTime={3} onFinish={handleTimerFinish} />}
 
-      {/* 게시 폼 컴포넌트 */}
-      {showPublishForm && (
+      {/* {showPublishForm && (
         <PublishForm onCancel={handlePublishCancel} onPublish={handlePublish} />
-      )}
+      )} */}
     </div>
   );
 }
