@@ -42,14 +42,12 @@ function RecordPage() {
 
   const onReady = (event) => {
     setPlayer(event.target);
-    // internalPlayer가 존재하는지 확인하고 오디오 트랙에 접근합니다.
     if (
       event.target.internalPlayer &&
       event.target.internalPlayer.getAudioTracks
     ) {
       const audioTrack = event.target.internalPlayer.getAudioTracks()[0];
       if (audioTrack) {
-        // YouTube 비디오의 오디오 트랙을 포함한 미디어 스트림을 생성합니다.
         const audioStream = new MediaStream();
         audioStream.addTrack(audioTrack);
         setAudioStream(audioStream);
@@ -63,22 +61,21 @@ function RecordPage() {
 
   const startRecording = async () => {
     try {
-      const videoStream = await navigator.mediaDevices.getUserMedia({
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: true,
-        audio: false, // Disable audio capturing from mic
+        audio: true,
+      });
+      mediaStreamRef.current = mediaStream;
+
+      const mediaRecorder = new MediaRecorder(mediaStream, {
+        mimeType: "video/webm",
       });
 
-      mediaStreamRef.current = new MediaStream();
-      mediaStreamRef.current.addTrack(videoStream.getVideoTracks()[0]);
+      mediaRecorder.ondataavailable = handleDataAvailable;
 
-      if (audioStream) {
-        // Add audio track from YouTube video
-        mediaStreamRef.current.addTrack(audioStream.getAudioTracks()[0]);
-      }
+      mediaRecorderRef.current = mediaRecorder;
 
-      mediaRecorderRef.current = new MediaRecorder(mediaStreamRef.current);
-      mediaRecorderRef.current.ondataavailable = handleDataAvailable;
-      mediaRecorderRef.current.start();
+      mediaRecorder.start();
     } catch (error) {
       console.error("Error accessing webcam:", error);
     }
@@ -126,7 +123,7 @@ function RecordPage() {
             playerVars: {
               autoplay: 0,
               controls: 0,
-              mute: 0, // Unmute the video
+              mute: 0,
             },
           }}
           onReady={onReady}
@@ -143,9 +140,9 @@ function RecordPage() {
 
       {recording && <Timer initialTime={3} onFinish={handleTimerFinish} />}
 
-      {/* {showPublishForm && (
+      {showPublishForm && (
         <PublishForm onCancel={handlePublishCancel} onPublish={handlePublish} />
-      )} */}
+      )}
     </div>
   );
 }
