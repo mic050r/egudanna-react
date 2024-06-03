@@ -3,11 +3,11 @@
   display: flex;
 }
 
-.video-frame {
+.result-video-frame {
   flex: 1;
   width: 400px;
-  width: 600px;
-  object-fit: f;
+  height: 600px;
+  object-fit: fill;
 }
 
 .modal-overlay {

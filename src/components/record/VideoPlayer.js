@@ -131,7 +131,7 @@ const VideoPlayer = () => {
       {isTimerActive && <Timer initialTime={3} onFinish={handleTimerFinish} />}
 
       <Modal show={showModal} onClose={handleCloseModal}>
-        <video controls className="video-frame">
+        <video controls className="result-video-frame">
           <source src={recordedVideoUrl} type="video/webm" />
           Your browser does not support the video tag.
         </video>
