@@ -124,11 +124,12 @@ const VideoPlayer = () => {
           audio={true}
           ref={webcamRef}
           screenshotFormat="image/jpeg"
-          className="video-frame"
+          className="webcam-frame"
         />
       </div>
       <CircleButton onClick={handleButtonClick} />
       {isTimerActive && <Timer initialTime={3} onFinish={handleTimerFinish} />}
+
       <Modal show={showModal} onClose={handleCloseModal}>
         <video controls className="video-frame">
           <source src={recordedVideoUrl} type="video/webm" />

@@ -6,13 +6,15 @@
   box-sizing: border-box;
   display: flex;
   justify-content: center;
+  flex: 1;
 }
 
 .publish-form {
-  width: 100%;
+  width: 600px;
   background-color: #ffffff;
   padding: 5px;
   box-sizing: border-box;
+  flex: 1;
 }
 
 .publish {
@@ -117,14 +119,16 @@
 }
 
 .button-group .submit {
-  background-color: #000000;
+  font-weight: bold;
+  background-color: #ff53ba;
   border: none;
 }
 
 .button-group .cancel {
+  font-weight: bold;
   background-color: #ffffff;
-  color: #000000;
-  border-color: #929292;
+  color: #ff53ba;
+  border-color: #ff53ba;
 }
 
 .button-group button + button {
