@@ -5,15 +5,15 @@ import TagInput from "./TagInput"; // 태그 입력 컴포넌트 import
 function PublishForm({ onCancel, onPublish }) {
   const [title, setTitle] = useState("");
   const [nickname, setNickname] = useState("");
-  const [hashtags, setHashtags] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [tags, setTags] = useState([]);
 
   const handlePublish = () => {
     const data = {
       title,
       nickname,
-      hashtags: hashtags.split(/\s+/),
+      tags: tags.split(/\s+/),
       email,
     };
     onPublish(data);
@@ -52,6 +52,21 @@ function PublishForm({ onCancel, onPublish }) {
           {/* TagInput 컴포넌트 사용 */}
         </div>
         <div className="input-group">
+          <label htmlFor="password" className="input-label">
+            비밀번호
+          </label>
+          <input
+            type="password"
+            password
+            value={password}
+            placeholder="비밀번호를 입력해주세요."
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <p className="pass-description">
+          **영상 수정을 할 때 비밀번호를 입력하면 수정할 수 있어요!
+        </p>
+        <div className="input-group">
           <label htmlFor="email" className="input-label">
             이메일
           </label>
@@ -66,6 +81,7 @@ function PublishForm({ onCancel, onPublish }) {
         <p className="email-description">
           **이메일을 입력하면 영상을 받을 수 있어요!
         </p>
+
         <div className="button-group">
           <button onClick={onCancel} className="cancel">
             취소
