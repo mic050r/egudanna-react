@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import RecordRTC from "recordrtc";
 import "../../css/record/video.css";
+import CircleButton from "./CircleButton";
+import Timer from "./Timer";
 
 const VideoPlayer = () => {
   const [videoUrl, setVideoUrl] = useState("/videos/example.mp4");
@@ -9,6 +11,7 @@ const VideoPlayer = () => {
   const videoRef = useRef(null);
   const [recorder, setRecorder] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
+  const [isTimerActive, setIsTimerActive] = useState(false);
 
   const startRecording = async () => {
     const webcamStream = webcamRef.current.stream;
@@ -37,7 +40,7 @@ const VideoPlayer = () => {
       ...destination.stream.getAudioTracks(),
     ]);
 
-    const rtcRecorder = RecordRTC(combinedStream, { type: "video" });
+    const rtcRecorder = new RecordRTC(combinedStream, { type: "video" });
     rtcRecorder.startRecording();
     setRecorder(rtcRecorder);
     setIsRecording(true);
@@ -64,9 +67,14 @@ const VideoPlayer = () => {
   };
 
   const handleButtonClick = () => {
+    setIsTimerActive(true);
+  };
+
+  const handleTimerFinish = () => {
     const videoElement = videoRef.current;
     videoElement.play();
     startRecording();
+    setIsTimerActive(false);
   };
 
   const handleVideoEnded = () => {
@@ -96,7 +104,8 @@ const VideoPlayer = () => {
           className="video-frame"
         />
       </div>
-      <button onClick={handleButtonClick}>Start</button>
+      <CircleButton onClick={handleButtonClick} />
+      {isTimerActive && <Timer initialTime={3} onFinish={handleTimerFinish} />}
     </div>
   );
 };
