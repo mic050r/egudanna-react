@@ -1,12 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Webcam from "react-webcam";
 import RecordRTC from "recordrtc";
 import "../../css/record/video.css";
 import CircleButton from "./CircleButton";
 import Timer from "./Timer";
+import Modal from "./Modal";
+import PublishForm from "../submit/PublishForm"; // 발행 폼 컴포넌트 import
 
 const VideoPlayer = () => {
   const [videoUrl, setVideoUrl] = useState("/videos/example.mp4");
+  const [recordedVideoUrl, setRecordedVideoUrl] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const webcamRef = useRef(null);
   const videoRef = useRef(null);
   const [recorder, setRecorder] = useState(null);
@@ -51,7 +55,8 @@ const VideoPlayer = () => {
       recorder.stopRecording(() => {
         const blob = recorder.getBlob();
         const url = URL.createObjectURL(blob);
-        setVideoUrl(url);
+        setRecordedVideoUrl(url);
+        setShowModal(true);
 
         const downloadLink = document.createElement("a");
         downloadLink.href = url;
@@ -81,6 +86,24 @@ const VideoPlayer = () => {
     stopRecording();
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handlePublish = (data) => {
+    console.log("Published data:", data);
+    setShowModal(false);
+  };
+
+  useEffect(() => {
+    if (showModal) {
+      const videoElement = document.querySelector(".modal video");
+      if (videoElement) {
+        videoElement.play();
+      }
+    }
+  }, [showModal]);
+
   return (
     <div className="app-container">
       <div className="video-container">
@@ -106,6 +129,13 @@ const VideoPlayer = () => {
       </div>
       <CircleButton onClick={handleButtonClick} />
       {isTimerActive && <Timer initialTime={3} onFinish={handleTimerFinish} />}
+      <Modal show={showModal} onClose={handleCloseModal}>
+        <video controls className="video-frame">
+          <source src={recordedVideoUrl} type="video/webm" />
+          Your browser does not support the video tag.
+        </video>
+        <PublishForm onCancel={handleCloseModal} onPublish={handlePublish} />
+      </Modal>
     </div>
   );
 };

@@ -1,5 +1,3 @@
-// Timer.js
-
 import React, { useState, useEffect } from "react";
 import "../../css/record/recording.css";
 
@@ -14,7 +12,7 @@ function Timer({ initialTime, onFinish }) {
 
       return () => clearTimeout(timer);
     } else if (time === 0) {
-      onFinish(); // 카운트다운이 끝났을 때 콜백 함수 호출
+      if (onFinish) onFinish();
     }
   }, [time, onFinish]);
 
