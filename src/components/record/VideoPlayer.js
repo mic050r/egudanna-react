@@ -8,6 +8,7 @@ const VideoPlayer = () => {
   const webcamRef = useRef(null);
   const videoRef = useRef(null);
   const [recorder, setRecorder] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
 
   const startRecording = async () => {
     const webcamStream = webcamRef.current.stream;
@@ -39,6 +40,7 @@ const VideoPlayer = () => {
     const rtcRecorder = RecordRTC(combinedStream, { type: "video" });
     rtcRecorder.startRecording();
     setRecorder(rtcRecorder);
+    setIsRecording(true);
   };
 
   const stopRecording = async () => {
@@ -56,11 +58,14 @@ const VideoPlayer = () => {
         document.body.removeChild(downloadLink);
 
         setRecorder(null);
+        setIsRecording(false);
       });
     }
   };
 
-  const handleVideoPlay = () => {
+  const handleButtonClick = () => {
+    const videoElement = videoRef.current;
+    videoElement.play();
     startRecording();
   };
 
@@ -74,10 +79,9 @@ const VideoPlayer = () => {
         <video
           id="mp4-video"
           controls
-          onPlay={handleVideoPlay}
-          onEnded={handleVideoEnded}
           ref={videoRef}
           className="video-frame"
+          onEnded={handleVideoEnded}
         >
           <source src={videoUrl} type="video/mp4" />
           Your browser does not support the video tag.
@@ -92,6 +96,7 @@ const VideoPlayer = () => {
           className="video-frame"
         />
       </div>
+      <button onClick={handleButtonClick}>Start</button>
     </div>
   );
 };
