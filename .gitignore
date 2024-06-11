@@ -2,11 +2,8 @@
 
 # dependencies
 /node_modules
-<<<<<<< HEAD
-=======
 package.json
 package-lock.json
->>>>>>> upstream/main
 /.pnp
 .pnp.js
 
