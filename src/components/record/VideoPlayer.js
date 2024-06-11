@@ -65,6 +65,7 @@ const VideoPlayer = () => {
         downloadLink.click();
         document.body.removeChild(downloadLink);
 
+        console.log(url);
         setRecorder(null);
         setIsRecording(false);
       });
