@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { FaReact } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
-import { FiTrash } from 'react-icons/fi'; // Import trash icon
+import { FiTrash } from 'react-icons/fi';
+import likeIcon from '../img/sorts/likes.svg';
+import likeOnIcon from '../img/sorts/likes-on.svg';
+import commentIcon from '../img/sorts/comment.svg';
+import userIcon from '../img/sorts/user.svg';
+import musicIcon from '../img/sorts/music.svg';
 import '../css/sorts.css';
 
 function App() {
     const [commentOpen, setCommentOpen] = useState(false);
     const [heartCount, setHeartCount] = useState(0);
+    const [liked, setLiked] = useState(false); // New state for like button
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [isRecording, setIsRecording] = useState(false);
@@ -18,6 +24,7 @@ function App() {
 
     const incrementHeartCount = () => {
         setHeartCount(heartCount + 1);
+        setLiked(true); // Set liked to true when the button is clicked
     };
 
     const handleCommentChange = (e) => {
@@ -59,50 +66,42 @@ function App() {
                 )}
                 <div className="buttons">
                     <div className="heart-container">
-                        <button className="button" onClick={incrementHeartCount}>❤️</button>
-                        <span className="heart-count">{heartCount}</span>
+                        <button className="button" onClick={incrementHeartCount}>
+                            <img src={liked ? likeOnIcon : likeIcon} alt="Heart" className="icon" />
+                        </button>
+                        <span className="heart-count" style={{ color: liked ? 'red' : 'white' }}>{heartCount}</span>
                     </div>
                     <div className="comment-container">
-                        <button className="button" onClick={toggleCommentSection}>💬</button>
+                        <button className="button" onClick={toggleCommentSection}>
+                            <img src={commentIcon} alt="Comment" className="icon" />
+                        </button>
                         <span className="comment-count">{comments.length}</span>
                     </div>
                 </div>
                 <div className="left-sidebar">
                     <div className="sidebar-item">
-                        <FaReact /> 사용자 이름
+                        <img src={userIcon} className='item-icon'/> 사용자 이름
                     </div>
                     <div className="sidebar-item">제목 내용</div>
                     <div className="sidebar-item">
-                        <FaReact />
+                    <img src={musicIcon} className='item-icon'/> 
                         <ul className="song-list">
-                            <li>노래 1</li>
-                            <li>노래 2</li>
+                            <li>Wonka 1971 Oompa Loo</li>
+                            <li>Wonka 1971 Oompa Loo</li>
+                            <li>Wonka 1971 Oompa Loo</li>
+                            <li>웡카</li>
                             <li>노래 3</li>
                         </ul>
                     </div>
                 </div>
             </div>
-            {commentOpen && (
-                <div className="comment-section">
-                    <form onSubmit={handleCommentSubmit} className="comment-form">
-                        <input
-                            type="text"
-                            value={newComment}
-                            onChange={handleCommentChange}
-                            placeholder="Add a comment"
-                            className="comment-input"
-                        />
-                        <button type="submit" className="comment-submit">Post</button>
-                    </form>
-                    <div className="comments-list">
-                        {comments.map((comment, index) => (
-                            <div key={index} className="comment">
-                                {comment}
-                            </div>
-                        ))}
+            {
+                commentOpen && (
+                    <div className="comment-section">
+                        
                     </div>
-                </div>
-            )}
+                )
+            }
             <div className="bottom-left-buttons">
                 <button className="button">?</button>
                 {!isRecording ? (
@@ -111,7 +110,10 @@ function App() {
                     <button className="start-recording">촬영 시작하기</button>
                 )}
             </div>
-        </div>
+            <div className="next-image-wrapper ">
+
+            </div>
+        </div >
     );
 }
 
