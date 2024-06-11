@@ -7,7 +7,11 @@
   flex: 1;
   width: 400px;
   height: 600px;
+<<<<<<< HEAD
+  object-fit: cover;
+=======
   object-fit: fill;
+>>>>>>> upstream/main
 }
 
 .modal-overlay {
