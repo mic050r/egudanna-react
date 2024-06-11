@@ -1,0 +1,258 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+}
+
+.left-sidebar {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-item {
+  font-size: 14px;
+  color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: left;
+}
+
+.sidebar-item:nth-child(2){
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.song-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: row;
+  gap :5px;
+}
+
+.song-list li {
+  font-size: 14px;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.178);
+  padding: 2px 10px;
+  border-radius: 24px;
+}
+
+.image-wrapper {
+  width: 450px;
+  height: 658.84px;
+  background-size: cover;
+  position: relative;
+  border-radius: 20px;
+  background-color: rgb(0, 0, 0);
+}
+
+.buttons {
+  position: absolute;
+  bottom: 200px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.button {
+  width: 40px;
+  height: 40px;
+  background-color: #00000000;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
+
+.comment-container,
+.heart-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.comment-count,
+.heart-count {
+  font-size: 16px;
+  color: rgb(255, 255, 255);
+}
+
+.comment-section {
+  position: absolute;
+  right: 400px;
+  /* Positioned next to the image */
+  width: 300px;
+  height: 658.84px;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.comment-form {
+  display: flex;
+  gap: 10px;
+}
+
+.comment-input {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.comment-submit {
+  padding: 5px 10px;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.comments-list {
+  margin-top: 10px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.comment {
+  background-color: #f9f9f9;
+  padding: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.bottom-left-buttons {
+  position: absolute;
+  bottom: 15vh;
+  left: 25vw;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.bottom-left-buttons>.button {
+  width: 50px;
+  height: 50px;
+  padding: 2px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: #FFDDF1 0 4px 4px 1px;
+  color: #FF53BA;
+}
+
+.start-recording {
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  padding: 15px;
+  background-color: #FF53BA;
+  color: white;
+  box-shadow: none;
+}
+
+.search-bar-sorts {
+  width: 410px;
+  height: fit-content;
+  position: relative;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 10px 20px;
+  margin-bottom: 5vh; 
+  border-radius: 50px;
+  border: #FF53BA 1px solid; /* 2px magenta border */
+}
+
+.search-input {
+  padding: 8px;
+  width: 90%;
+  border: none;
+  border-radius: 5px 0 0 5px;
+}
+
+.search-button {
+  background-color: #ffffff;
+  position: absolute;
+  right: 10px;
+  border: none; /* Remove default border */
+  color: #FF53BA;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.search-button:focus {
+  outline: none;
+}
+/* Add these styles to your existing CSS */
+
+.trash-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: #00000000;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: white;
+}
+
+.confirmation-div {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  width: 150px;
+  background-color: white;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.confirmation-div button {
+  padding: 5px;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -1,0 +1,23 @@
+import React from "react";
+import { Provider } from "react-redux";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import RecordPage from "./pages/Record"; // RecordPage 컴포넌트 import
+import MainPage from "./pages/Main"
+import SortsPage from "./pages/Sorts"
+import ScreenPage from "./pages/ChallengeSelectionScreen"
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/record" element={<RecordPage />} />
+        <Route path="/main" element={<MainPage/>}/>
+        <Route path="/sorts" element={<SortsPage/>}/>
+        <Route path="/screen" element={<ScreenPage/>}/>
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
