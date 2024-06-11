@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webcam and Screen Audio Recorder</title>
+  </head>
+  <body>
+    <video id="video" autoplay></video>
+    <button id="startRecordingButton">Start Recording</button>
+    <button id="stopRecordingButton" disabled>Stop Recording</button>
+    <script>
+      async function startCamera() {
+        try {
+          const videoStream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+          });
+          const videoElement = document.getElementById("video");
+          videoElement.srcObject = videoStream;
+          return videoStream;
+        } catch (error) {
+          console.error("Error accessing webcam:", error);
+        }
+      }
+
+      async function captureScreenAudio() {
+        try {
+          const screenStream = await navigator.mediaDevices.getDisplayMedia({
+            audio: true,
+            video: false,
+          });
+          return screenStream.getAudioTracks()[0];
+        } catch (error) {
+          console.error("Error capturing screen audio:", error);
+        }
+      }
+
+      async function startRecording() {
+        const videoStream = await startCamera();
+        const audioTrack = await captureScreenAudio();
+
+        if (!videoStream || !audioTrack) {
+          alert("Could not access video or audio sources.");
+          return;
+        }
+
+        const combinedStream = new MediaStream([
+          ...videoStream.getVideoTracks(),
+          audioTrack,
+        ]);
+        const mediaRecorder = new MediaRecorder(combinedStream);
+        const chunks = [];
+
+        mediaRecorder.ondataavailable = function (event) {
+          if (event.data.size > 0) {
+            chunks.push(event.data);
+          }
+        };
+
+        mediaRecorder.onstop = function () {
+          const blob = new Blob(chunks, { type: "video/webm" });
+          const videoURL = URL.createObjectURL(blob);
+          const downloadLink = document.createElement("a");
+          downloadLink.href = videoURL;
+          downloadLink.download = "recorded-video.webm";
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+        };
+
+        mediaRecorder.start();
+        document.getElementById("stopRecordingButton").disabled = false;
+
+        document.getElementById("stopRecordingButton").onclick = function () {
+          mediaRecorder.stop();
+          document.getElementById("stopRecordingButton").disabled = true;
+        };
+      }
+
+      document.getElementById("startRecordingButton").onclick = startRecording;
+    </script>
+  </body>
+</html>

@@ -65,7 +65,10 @@ const VideoPlayer = () => {
         downloadLink.click();
         document.body.removeChild(downloadLink);
 
+<<<<<<< HEAD
         console.log(url);
+=======
+>>>>>>> upstream/main
         setRecorder(null);
         setIsRecording(false);
       });
