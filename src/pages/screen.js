@@ -11,21 +11,21 @@ const barData = [
     id: 1,
     name: 'John Doe',
     level: "2",
-    profileImage: '../img/main-icon(3).png',
+    profileImage: require('../img/main-icon(4).png'),
     category: 'A'
   },
   {
     id: 2,
     name: 'Jane Smith',
     level: "1",
-    profileImage: '../img/main-icon(4).png',
+    profileImage: require('../img/main-icon(4).png'),
     category: 'B'
   },
   {
     id: 3,
     name: 'Jane Smith',
     level: "2",
-    profileImage: '../img/main-icon(4).png',
+    profileImage: require('../img/main-icon(4).png'),
     category: 'B'
   },
   // 다른 바들의 데이터도 추가할 수 있습니다.
@@ -162,7 +162,7 @@ function App() {
             {hoveredBar !== bar.id ? (
               <div className="bar-info">
                 <div className="bar-title">
-                  <img src={require(bar.profileImage)} alt="Profile" />
+                  <img src={bar.profileImage} alt="Profile" />
                   <p className='bar-name'>{bar.name}</p>
                 </div>
                 <p className='bar-level'>LV.{bar.level}</p>
