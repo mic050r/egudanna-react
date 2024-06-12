@@ -11,6 +11,7 @@ function App() {
     useState(false);
   const [category, setCategory] = useState("All");
   const [categoryDropdownVisible, setCategoryDropdownVisible] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 추가
   const videoRefs = useRef({});
 
   useEffect(() => {
@@ -85,7 +86,12 @@ function App() {
     return difficulty === level ? <FaCheckCircle /> : <FaRegCircle />;
   };
 
-  const filterData = (data, selectedCategory, selectedDifficulty) => {
+  const filterData = (
+    data,
+    selectedCategory,
+    selectedDifficulty,
+    searchTerm
+  ) => {
     let filteredData = data;
 
     if (selectedCategory !== "All") {
@@ -100,10 +106,16 @@ function App() {
       );
     }
 
+    if (searchTerm) {
+      filteredData = filteredData.filter((bar) =>
+        bar.challenge_name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
     return filteredData;
   };
 
-  const filteredData = filterData(barData, category, difficulty);
+  const filteredData = filterData(barData, category, difficulty, searchTerm);
 
   return (
     <div className="screen-container">
@@ -112,6 +124,8 @@ function App() {
           type="text"
           className="bar-search"
           placeholder="추고 싶은 챌린지 검색"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)} // 검색어 상태 업데이트
         />
         <img src={searchImage} className="bar-button" alt="Search" />
       </div>
