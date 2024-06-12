@@ -63,14 +63,18 @@ function App() {
         const handleWheel = (event) => {
             if (event.deltaY > 0) {
                 // 마우스 휠을 아래로 스크롤할 때
-                if (currentIndex < barData.length - 1) {
-                    setCurrentIndex(currentIndex + 1);
-                }
+                setTimeout(function () {
+                    if (currentIndex < barData.length - 1) {
+                        setCurrentIndex(currentIndex + 1);
+                    }
+                }, 150);
             } else {
                 // 마우스 휠을 위로 스크롤할 때
-                if (currentIndex > 0) {
-                    setCurrentIndex(currentIndex - 1);
-                }
+                setTimeout(function () {
+                    if (currentIndex > 0) {
+                        setCurrentIndex(currentIndex - 1);
+                    }
+                }, 150);
             }
         };
 
@@ -130,7 +134,8 @@ function App() {
                             }}
                             autoPlay={hoveredBar === barData[currentIndex].id}
                             loop
-                            controls
+                            muted
+                        // controls
                         >
                             <source src={barData[currentIndex].video} type="video/mp4" />
                             Your browser does not support the video tag.
@@ -209,7 +214,8 @@ function App() {
                     }}
                     autoPlay={hoveredBar === barData[currentIndex + 1].id}
                     loop
-                    controls
+                    muted
+                // controls
                 >
                     <source src={barData[currentIndex + 1].video} type="video/mp4" />
                     Your browser does not support the video tag.
