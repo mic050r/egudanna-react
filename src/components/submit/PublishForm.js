@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import "../../css/record/publishForm.css";
-import TagInput from "./TagInput"; // 태그 입력 컴포넌트 import
 
-function PublishForm({ onCancel, onPublish }) {
+import TagInput from "./TagInput"; // 태그 입력 컴포넌트 import
+const PublishForm = ({ onCancel, onPublish, challenge_name, difficulty }) => {
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onPublish({ title, description, challenge_name, difficulty });
+  };
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -93,6 +99,6 @@ function PublishForm({ onCancel, onPublish }) {
       </div>
     </div>
   );
-}
+};
 
 export default PublishForm;

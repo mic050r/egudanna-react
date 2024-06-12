@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Webcam from "react-webcam";
 import RecordRTC from "recordrtc";
 import "../../css/record/video.css";
@@ -8,7 +9,22 @@ import Modal from "./Modal";
 import PublishForm from "../submit/PublishForm"; // 발행 폼 컴포넌트 import
 
 const VideoPlayer = () => {
-  const [videoUrl, setVideoUrl] = useState("/videos/example.mp4");
+  const location = useLocation();
+
+  const { challenge_name, reference_video_filename, difficulty } =
+    location.state || {
+      challenge_name: "default challenge",
+      reference_video_filename: "default_video",
+      difficulty: 1,
+    };
+
+  const [videoUrl, setVideoUrl] = useState(
+    `/videos/${reference_video_filename}.mp4`
+  );
+  useEffect(() => {
+    console.log("Location state in /record component:", location.state);
+  }, [location.state]);
+
   const [recordedVideoUrl, setRecordedVideoUrl] = useState("");
   const [showModal, setShowModal] = useState(false);
   const webcamRef = useRef(null);
@@ -135,7 +151,12 @@ const VideoPlayer = () => {
           <source src={recordedVideoUrl} type="video/webm" />
           Your browser does not support the video tag.
         </video>
-        <PublishForm onCancel={handleCloseModal} onPublish={handlePublish} />
+        <PublishForm
+          onCancel={handleCloseModal}
+          onPublish={handlePublish}
+          challenge_name={challenge_name}
+          difficulty={difficulty}
+        />
       </Modal>
     </div>
   );
