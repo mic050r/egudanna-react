@@ -44,20 +44,15 @@ function App() {
     setHoveredBar(barId);
     // 비디오 참조가 null이 아닌지 확인
     if (videoRefs.current[barId]) {
-      // hoveredBar와 현재 바의 ID가 일치하면 비디오 재생
-      if (hoveredBar !== barId) {
-        videoRefs.current[barId].play();
-      } else {
-        // hoveredBar와 현재 바의 ID가 일치하지 않으면 비디오 멈춤
-        videoRefs.current[barId].pause();
-        videoRefs.current[barId].currentTime = 0;
-      }
+      // 비디오 재생
+      videoRefs.current[barId].play();
     }
   };
 
   const handleBarLeave = (barId) => {
     setHoveredBar(null);
     if (videoRefs.current[barId]) {
+      // 비디오 일시 정지 및 재생 시간 초기화
       videoRefs.current[barId].pause();
       videoRefs.current[barId].currentTime = 0;
     }
@@ -176,11 +171,20 @@ function App() {
             onMouseEnter={() => handleBarHover(bar.id)}
             onMouseLeave={() => handleBarLeave(bar.id)}
           >
-
             <video
               className="bar-info"
-              ref={el => videoRefs.current[bar.id] = el} // 각 비디오에 대한 참조 설정
-              autoPlay
+              ref={(el) => {
+                if (el) {
+                  videoRefs.current[bar.id] = el;
+                  videoRefs.current[bar.id].currentTime = 0;
+                  // 호버 시에만 재생되도록 수정
+                  if (hoveredBar !== bar.id) {
+                    videoRefs.current[bar.id].pause();
+                    videoRefs.current[bar.id].currentTime = 0;
+                  }
+                }
+              }}
+              autoPlay={hoveredBar === bar.id}
               loop
               muted
             >
@@ -189,13 +193,11 @@ function App() {
             </video>
 
             {hoveredBar !== bar.id ?
-
               <div>
                 <div className="bar-title">
                   <img src={bar.profileImage} alt="Profile" />
                   <p className='bar-name'>{bar.name}</p>
                 </div>
-
                 <p className='bar-level'>LV.{bar.level}</p>
               </div>
               :

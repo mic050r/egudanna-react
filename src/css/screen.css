@@ -52,6 +52,7 @@
 
 .dropdown-container {
   position: relative;
+  top: 5vh;
   width: 100%;
   display: flex;
   align-items: center;
@@ -60,8 +61,8 @@
 }
 
 .difficulty-dropdown {
-  position: fixed;
-  top: 27%;
+  position: absolute;
+  top: calc(5vh + 15px);
   width: 230px;
   background-color: #ffffff;
   border: 1px solid var(--sub-color);
@@ -103,6 +104,8 @@
 }
 
 .search-bar {
+  position: absolute;
+  top: 5vh;
   width: 60%;
   height: 50px;
   display: flex;
@@ -201,4 +204,8 @@
   right: var(--bar-padding);
   bottom: var(--bar-padding);
   z-index: 2;
+}
+
+.comment-section{
+  position: absolute;
 }
