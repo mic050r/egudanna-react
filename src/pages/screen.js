@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FaCheckCircle, FaRegCircle } from "react-icons/fa";
 import '../css/screen.css';
 import searchImage from '../img/screen/search.svg';
-import bracketUpIcon from '../img/screen/up-bracket.svg';
-import bracketDownIcon from '../img/screen/down-bracket.svg';
 
 // 가상의 JSON 데이터
 const barData = [
@@ -12,6 +10,7 @@ const barData = [
     name: 'John Doe',
     level: "2",
     profileImage: require('../img/main-icon(4).png'),
+    video: '/videos/example.mp4',
     category: 'A'
   },
   {
@@ -19,6 +18,7 @@ const barData = [
     name: 'Jane Smith',
     level: "1",
     profileImage: require('../img/main-icon(4).png'),
+    video: '/videos/example.mp4',
     category: 'B'
   },
   {
@@ -26,6 +26,7 @@ const barData = [
     name: 'Jane Smith',
     level: "2",
     profileImage: require('../img/main-icon(4).png'),
+    video: '/videos/example.mp4',
     category: 'B'
   },
   // 다른 바들의 데이터도 추가할 수 있습니다.
@@ -37,13 +38,29 @@ function App() {
   const [difficultyDropdownVisible, setDifficultyDropdownVisible] = useState(false);
   const [category, setCategory] = useState('All');
   const [categoryDropdownVisible, setCategoryDropdownVisible] = useState(false);
+  const videoRefs = useRef({});
 
   const handleBarHover = (barId) => {
     setHoveredBar(barId);
+    // 비디오 참조가 null이 아닌지 확인
+    if (videoRefs.current[barId]) {
+      // hoveredBar와 현재 바의 ID가 일치하면 비디오 재생
+      if (hoveredBar !== barId) {
+        videoRefs.current[barId].play();
+      } else {
+        // hoveredBar와 현재 바의 ID가 일치하지 않으면 비디오 멈춤
+        videoRefs.current[barId].pause();
+        videoRefs.current[barId].currentTime = 0;
+      }
+    }
   };
 
-  const handleBarLeave = () => {
+  const handleBarLeave = (barId) => {
     setHoveredBar(null);
+    if (videoRefs.current[barId]) {
+      videoRefs.current[barId].pause();
+      videoRefs.current[barId].currentTime = 0;
+    }
   };
 
   const handleDifficultyClick = () => {
@@ -157,17 +174,33 @@ function App() {
             key={bar.id}
             className="bar"
             onMouseEnter={() => handleBarHover(bar.id)}
-            onMouseLeave={handleBarLeave}
+            onMouseLeave={() => handleBarLeave(bar.id)}
           >
-            {hoveredBar !== bar.id ? (
-              <div className="bar-info">
+
+            <video
+              className="bar-info"
+              ref={el => videoRefs.current[bar.id] = el} // 각 비디오에 대한 참조 설정
+              autoPlay
+              loop
+              muted
+            >
+              <source src={bar.video} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+
+            {hoveredBar !== bar.id ?
+
+              <div>
                 <div className="bar-title">
                   <img src={bar.profileImage} alt="Profile" />
                   <p className='bar-name'>{bar.name}</p>
                 </div>
+
                 <p className='bar-level'>LV.{bar.level}</p>
               </div>
-            ) : <div></div>}
+              :
+              <div></div>
+            }
           </div>
         ))}
       </div>
