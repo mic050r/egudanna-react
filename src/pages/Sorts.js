@@ -31,7 +31,7 @@ const barData = [
             '노래1',
             '노래4',
         ],
-        likes: 0,
+        likes: 5,
         comments: [],
     },
     {
@@ -45,7 +45,7 @@ const barData = [
             '노래3',
             '노래4',
         ],
-        likes: 0,
+        likes: 1,
         comments: [],
     },
 ];
@@ -159,7 +159,7 @@ const App = () => {
                                 <button className="button" onClick={incrementHeartCount}>
                                     <img src={liked ? likeOnIcon : likeIcon} alt="Heart" className="icon" />
                                 </button>
-                                <span className="heart-count" style={{ color: liked ? '#F24E1E' : 'white' }}>{heartCount}</span>
+                                <span className="heart-count" style={{ color: liked ? '#F24E1E' : 'white' }}>{barData[currentIndex].likes}</span>
                             </div>
                             <div className="comment-container">
                                 <button className="button" onClick={toggleCommentSection}>
