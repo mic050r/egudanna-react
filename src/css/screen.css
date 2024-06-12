@@ -93,7 +93,7 @@
   gap: 10px;
   cursor: pointer;
   color: black;
-  /* width: fit-content; */
+  width: fit-content;
   /* 기본 텍스트 색상 검정색으로 설정 */
 }
 
@@ -226,6 +226,13 @@
 
 .bar-level {
   position: absolute;
+  /* color: black;
+  text-shadow: 1px 1px 0 #fff, -1px 1px 0 #fff, 1px -1px 0 #fff,
+    -1px -1px 0 #fff; */
+  color: white;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
+    1px 1px 0 black;
+  font-weight: bold;
   right: var(--bar-padding);
   bottom: var(--bar-padding);
   z-index: 2;

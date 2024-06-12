@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaCheckCircle, FaRegCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "../css/screen.css";
 import searchImage from "../img/screen/search.svg";
 import barData from "../data/reference_video_data.json";
@@ -11,7 +12,7 @@ function App() {
     useState(false);
   const [category, setCategory] = useState("All");
   const [categoryDropdownVisible, setCategoryDropdownVisible] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 추가
+  const [searchTerm, setSearchTerm] = useState("");
   const videoRefs = useRef({});
 
   useEffect(() => {
@@ -48,10 +49,6 @@ function App() {
 
   const handleBarLeave = () => {
     setHoveredBar(null);
-  };
-
-  const handleBarClick = (barId) => {
-    alert(`Redirect to /details/${barId}`);
   };
 
   const handleDifficultyClick = () => {
@@ -282,47 +279,69 @@ function App() {
       </div>
 
       <div className="grid">
-        {filteredData.map((bar, index) => (
+        {filteredData.map((bar) => (
           <div
             key={bar.reference_video_filename} // 고유한 key를 사용하여 컴포넌트가 올바르게 렌더링되도록
             className="bar"
             onMouseEnter={() => handleBarHover(bar.reference_video_filename)}
-            onMouseLeave={() => handleBarLeave()}
-            onClick={() => handleBarClick(bar.reference_video_filename)}
+            onMouseLeave={handleBarLeave}
           >
-            <video
-              className="bar-info"
-              ref={(el) => {
-                if (el) {
-                  videoRefs.current[bar.reference_video_filename] = el;
-                  videoRefs.current[
-                    bar.reference_video_filename
-                  ].currentTime = 0;
-                  videoRefs.current[bar.reference_video_filename].muted = true;
-                }
+            <Link
+              to="/record"
+              state={{
+                challenge_name: bar.challenge_name,
+                reference_video_filename: bar.reference_video_filename,
+                difficulty: bar.difficulty,
+                tags: bar.tags,
               }}
-              autoPlay={hoveredBar === bar.reference_video_filename}
-              loop
-              muted
+              className="bar-info"
+              onClick={() =>
+                console.log("Clicked bar info. Data:", {
+                  challenge_name: bar.challenge_name,
+                  reference_video_filename: bar.reference_video_filename,
+                  difficulty: bar.difficulty,
+                  tags: bar.tags,
+                })
+              }
             >
-              <source
-                src={`/videos/${bar.reference_video_filename}.mp4`}
-                type="video/mp4"
-              />
-              Your browser does not support the video tag.
-            </video>
-
-            {hoveredBar !== bar.reference_video_filename ? (
-              <div>
-                <div className="bar-title">
-                  <img src={require(`../img/main-icon(4).png`)} alt="Profile" />
-                  <p className="bar-name">{bar.challenge_name}</p>
+              <video
+                className="bar-info"
+                ref={(el) => {
+                  if (el) {
+                    videoRefs.current[bar.reference_video_filename] = el;
+                    videoRefs.current[
+                      bar.reference_video_filename
+                    ].currentTime = 0;
+                    videoRefs.current[
+                      bar.reference_video_filename
+                    ].muted = true;
+                  }
+                }}
+                autoPlay={hoveredBar === bar.reference_video_filename}
+                loop
+                muted
+              >
+                <source
+                  src={`/videos/${bar.reference_video_filename}.mp4`}
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+              {hoveredBar !== bar.reference_video_filename ? (
+                <div>
+                  <div className="bar-title">
+                    <img
+                      src={require(`../img/main-icon(4).png`)}
+                      alt="Profile"
+                    />
+                    <p className="bar-name">{bar.challenge_name}</p>
+                  </div>
+                  <p className="bar-level">LV.{bar.difficulty}</p>
                 </div>
-                <p className="bar-level">LV.{bar.difficulty}</p>
-              </div>
-            ) : (
-              <div></div>
-            )}
+              ) : (
+                <div></div>
+              )}
+            </Link>
           </div>
         ))}
       </div>
