@@ -210,6 +210,7 @@ const App = () => {
             {commentOpen && (
                 <div className="comment-section">
                     <div>
+                        <button onClick={toggleCommentSection}>X</button>
                         {barData[currentIndex].comments.map((comment, index) => (
                             <div key={index}>{comment}</div>
                         ))}
