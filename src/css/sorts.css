@@ -90,7 +90,6 @@ body {
   background-size: cover;
   position: relative;
   border-radius: 20px;
-  background-color: rgb(0, 0, 0);
   
   overflow: hidden;
 }
@@ -100,12 +99,11 @@ source{
 }
 
 .next-image-wrapper {
-  width: calc(var(--sorts-main-screen-width) / 2);
+  width: calc(var(--sorts-main-screen-width) / );
   height: calc(var(--sorts-main-screen-height) / 2);
   position: absolute;
   bottom: calc(var(--sorts-main-screen-height) / -3);
   border-radius: 20px;
-  background-color: rgb(0, 0, 0);
 }
 
 .buttons {

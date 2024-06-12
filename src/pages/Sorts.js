@@ -9,7 +9,6 @@ import userIcon from '../img/sorts/user.svg';
 import musicIcon from '../img/sorts/music.svg';
 import '../css/sorts.css';
 
-// 가상의 JSON 데이터
 const barData = [
     {
         id: 1,
@@ -19,7 +18,9 @@ const barData = [
         songs: [
             '노래1',
             '노래2',
-        ]
+        ],
+        likes: 0,
+        comments: [],
     },
     {
         id: 2,
@@ -29,7 +30,9 @@ const barData = [
         songs: [
             '노래1',
             '노래4',
-        ]
+        ],
+        likes: 0,
+        comments: [],
     },
     {
         id: 3,
@@ -41,16 +44,17 @@ const barData = [
             '노래2',
             '노래3',
             '노래4',
-        ]
+        ],
+        likes: 0,
+        comments: [],
     },
-    // 다른 바들의 데이터도 추가할 수 있습니다.
 ];
 
-function App() {
+const App = () => {
     const [hoveredBar, setHoveredBar] = useState(null);
 
     const [commentOpen, setCommentOpen] = useState(false);
-    const [heartCount, setHeartCount] = useState(0);
+    const [heartCount, setHeartCount] = useState(   0);
     const [liked, setLiked] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
@@ -62,17 +66,17 @@ function App() {
     useEffect(() => {
         const handleWheel = (event) => {
             if (event.deltaY > 0) {
-                // 마우스 휠을 아래로 스크롤할 때
                 setTimeout(function () {
                     if (currentIndex < barData.length - 1) {
                         setCurrentIndex(currentIndex + 1);
+                        setLiked(false);
                     }
                 }, 150);
             } else {
-                // 마우스 휠을 위로 스크롤할 때
                 setTimeout(function () {
                     if (currentIndex > 0) {
                         setCurrentIndex(currentIndex - 1);
+                        setLiked(false);
                     }
                 }, 150);
             }
@@ -92,6 +96,7 @@ function App() {
     const incrementHeartCount = () => {
         setHeartCount(heartCount + 1);
         setLiked(true);
+        barData[currentIndex].likes += 1;
     };
 
     const handleCommentChange = (e) => {
@@ -103,6 +108,7 @@ function App() {
         if (newComment.trim() !== '') {
             setComments([...comments, newComment]);
             setNewComment('');
+            barData[currentIndex].comments.push(newComment);
         }
     };
 
@@ -135,7 +141,6 @@ function App() {
                             autoPlay={hoveredBar === barData[currentIndex].id}
                             loop
                             muted
-                        // controls
                         >
                             <source src={barData[currentIndex].video} type="video/mp4" />
                             Your browser does not support the video tag.
@@ -154,7 +159,7 @@ function App() {
                                 <button className="button" onClick={incrementHeartCount}>
                                     <img src={liked ? likeOnIcon : likeIcon} alt="Heart" className="icon" />
                                 </button>
-                                <span className="heart-count" style={{ color: liked ? 'red' : 'white' }}>{heartCount}</span>
+                                <span className="heart-count" style={{ color: liked ? '#F24E1E' : 'white' }}>{heartCount}</span>
                             </div>
                             <div className="comment-container">
                                 <button className="button" onClick={toggleCommentSection}>
@@ -183,7 +188,6 @@ function App() {
                                     <input type="text" value={newComment} onChange={handleCommentChange} />
                                     <button type="submit">Add Comment</button>
                                 </form>
-                                {/* Display existing comments */}
                                 <ul>
                                     {comments.map((comment, index) => (
                                         <li key={index}>{comment}</li>
@@ -203,7 +207,6 @@ function App() {
                     <button className="start-recording" onClick={() => window.location.href = '/screen'}>촬영 시작하기</button>
                 )}
             </div>
-            {/* Conditionally render the next-image-wrapper */}
             {currentIndex < barData.length - 1 && (
                 <video className="next-image-wrapper"
                     ref={(el) => {
@@ -215,14 +218,13 @@ function App() {
                     autoPlay={hoveredBar === barData[currentIndex + 1].id}
                     loop
                     muted
-                // controls
                 >
                     <source src={barData[currentIndex + 1].video} type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
             )}
-        </div >
+        </div>
     );
 }
 
-export default App;
+export default App
