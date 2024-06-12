@@ -89,7 +89,7 @@ body {
   height: var(--sorts-main-screen-height);
   background-size: cover;
   position: relative;
-  border-radius: 20px;
+  border-radius: 15px;
   
   overflow: hidden;
 }
@@ -103,7 +103,7 @@ source{
   height: calc(var(--sorts-main-screen-height) / 2);
   position: absolute;
   bottom: calc(var(--sorts-main-screen-height) / -3);
-  border-radius: 20px;
+  border-radius: 15px;
 }
 
 .buttons {
@@ -152,21 +152,107 @@ source{
 
 .comment-section {
   position: absolute;
-  top: 0;
-  right: calc(var(--sorts-main-screen-width) + 10px); /* Adjust the right position */
-  width: 250px; /* Adjust the width according to your preference */
-  height: 100%; /* Occupy the full height of the image wrapper */
+  right: calc(var(--sorts-main-screen-width) - 60px); /* Adjust the right position */
+  width: 300px; 
+  height: var(--sorts-main-screen-height); /* Occupy the full height of the image wrapper */
   background-color: rgba(255, 255, 255, 0.1); /* Adjust background color and opacity */
-  border-radius: 20px; /* Apply border radius */
-  padding: 20px; /* Add padding for content */
+  border: 1px solid #FF53BA;
+  border-radius: 15px; /* Apply border radius */
   box-sizing: border-box; /* Include padding in width and height calculation */
   display: flex; /* Make it a flex container */
   flex-direction: column; /* Stack comments vertically */
-  gap: 10px; /* Add gap between comments */
-  overflow-y: auto; /* Enable vertical scrolling if needed */
+  margin: 0;
+  overflow-y: hidden; /* Enable vertical scrolling if needed */
+  z-index: 10000000000;
+  box-sizing: border-box; 
 }
 
+.comment-section > div {
+  padding: 25px;
+  line-height: 15px;
+  width: 100%;
+  height: 85%;
+  overflow: hidden;
+  overflow-y: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 25px;
+  box-sizing: border-box; 
+}
+.input-things {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: flex-start;
+  text-align: left;
+  box-sizing: border-box; 
+  gap: 2px;
+}
 
+.input-things > p {
+  width: 100%;
+  word-wrap:break-word;
+}
+
+.input-things > p:nth-child(1){
+  color: #868686;
+  font-size: 12px;
+}
+
+.input-things > p:nth-child(2){
+  color: #000000;
+  font-size: 15px;
+}
+
+.comment-input{
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+  height: 15%;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #FF53BA;
+  border-radius: 15px;
+  box-sizing: border-box; /* 박스 모델에 border와 padding을 포함시킴 */
+}
+
+.comment-input > p {
+  font-size: 10px;
+  color: #FF53BA;
+}
+
+.comment-input > input,
+.comment-input > * > input {
+  border: 0;
+  border-bottom: 1px solid #FF53BA;
+}
+
+.comment-input > input{
+  width: calc(10px * 14);
+}
+
+.comment-input > * > input {
+  width: 75%;
+}
+
+.comment-input > * > button {
+  font-size: 11px;
+  width: fit-content;
+  padding: 2px 8px;
+  background-color: #FF53BA;
+  border: 0;
+  border-radius: 5px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .bottom-left-buttons {
   position: absolute;

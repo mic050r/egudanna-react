@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FaReact } from 'react-icons/fa';
-import { FiSearch } from 'react-icons/fi';
-import { FiTrash } from 'react-icons/fi';
+import { FiSearch, FiTrash } from 'react-icons/fi';
 import likeIcon from '../img/sorts/likes.svg';
 import likeOnIcon from '../img/sorts/likes-on.svg';
 import commentIcon from '../img/sorts/comment.svg';
@@ -15,10 +13,7 @@ const barData = [
         name: 'Jane Smith',
         title: '제목입니다',
         video: '/videos/example.mp4',
-        songs: [
-            '노래1',
-            '노래2',
-        ],
+        songs: ['노래1', '노래2'],
         likes: 0,
         comments: [],
     },
@@ -27,10 +22,7 @@ const barData = [
         name: 'Jane Smith',
         title: '제목입니다',
         video: '/videos/example.mp4',
-        songs: [
-            '노래1',
-            '노래4',
-        ],
+        songs: ['노래1', '노래4'],
         likes: 5,
         comments: [],
     },
@@ -39,12 +31,7 @@ const barData = [
         name: 'Jane Smith',
         title: '제목입니다',
         video: '/videos/example.mp4',
-        songs: [
-            '노래1',
-            '노래2',
-            '노래3',
-            '노래4',
-        ],
+        songs: ['노래1', '노래2', '노래3', '노래4'],
         likes: 1,
         comments: [],
     },
@@ -52,12 +39,12 @@ const barData = [
 
 const App = () => {
     const [hoveredBar, setHoveredBar] = useState(null);
-
     const [commentOpen, setCommentOpen] = useState(false);
-    const [heartCount, setHeartCount] = useState(   0);
+    const [heartCount, setHeartCount] = useState(0);
     const [liked, setLiked] = useState(false);
     const [comments, setComments] = useState([]);
-    const [newComment, setNewComment] = useState('');
+    const [newComment, setNewComment] = useState([]);
+    const [nickname, setNickname] = useState('');
     const [isRecording, setIsRecording] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -65,20 +52,24 @@ const App = () => {
 
     useEffect(() => {
         const handleWheel = (event) => {
-            if (event.deltaY > 0) {
-                setTimeout(function () {
-                    if (currentIndex < barData.length - 1) {
-                        setCurrentIndex(currentIndex + 1);
-                        setLiked(false);
-                    }
-                }, 150);
-            } else {
-                setTimeout(function () {
-                    if (currentIndex > 0) {
-                        setCurrentIndex(currentIndex - 1);
-                        setLiked(false);
-                    }
-                }, 150);
+            if (!commentOpen) {
+                if (event.deltaY > 0) {
+                    setTimeout(() => {
+                        if (currentIndex < barData.length - 1) {
+                            setCurrentIndex(currentIndex + 1);
+                            setCommentOpen(false);
+                            setLiked(false);
+                        }
+                    }, 150);
+                } else {
+                    setTimeout(() => {
+                        if (currentIndex > 0) {
+                            setCurrentIndex(currentIndex - 1);
+                            setCommentOpen(false);
+                            setLiked(false);
+                        }
+                    }, 150);
+                }
             }
         };
 
@@ -87,7 +78,7 @@ const App = () => {
         return () => {
             window.removeEventListener('wheel', handleWheel);
         };
-    }, [currentIndex]);
+    }, [currentIndex, commentOpen]);
 
     const toggleCommentSection = () => {
         setCommentOpen(!commentOpen);
@@ -103,12 +94,25 @@ const App = () => {
         setNewComment(e.target.value);
     };
 
+    const handleNicknameChange = (e) => {
+        setNickname(e.target.value);
+    };
+
     const handleCommentSubmit = (e) => {
         e.preventDefault();
-        if (newComment.trim() !== '') {
-            setComments([...comments, newComment]);
+        if (newComment.trim() !== '' && nickname.trim() !== '') {
+            setComments([...comments,
+            <div className='input-things'>
+                <p>{nickname}</p>
+                <p>{newComment}</p>
+            </div>]);
             setNewComment('');
-            barData[currentIndex].comments.push(newComment);
+            setNickname('');
+            barData[currentIndex].comments.push(
+                <div className='input-things'>
+                    <p>{nickname}</p>
+                    <p>{newComment}</p>
+                </div>);
         }
     };
 
@@ -165,7 +169,7 @@ const App = () => {
                                 <button className="button" onClick={toggleCommentSection}>
                                     <img src={commentIcon} alt="Comment" className="icon" />
                                 </button>
-                                <span className="comment-count">{comments.length}</span>
+                                <span className="comment-count">{barData[currentIndex].comments.length}</span>
                             </div>
                         </div>
                         <div className="left-sidebar">
@@ -182,22 +186,27 @@ const App = () => {
                                 </ul>
                             </div>
                         </div>
-                        {commentOpen && (
-                            <div className="comment-section">
-                                <form onSubmit={handleCommentSubmit}>
-                                    <input type="text" value={newComment} onChange={handleCommentChange} />
-                                    <button type="submit">Add Comment</button>
-                                </form>
-                                <ul>
-                                    {comments.map((comment, index) => (
-                                        <li key={index}>{comment}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
                     </div>
                 )}
             </div>
+            {commentOpen && (
+                <div className="comment-section">
+                    <div>
+                        {barData[currentIndex].comments.map((comment, index) => (
+                            <div key={index}>{comment}</div>
+                        ))}
+                    </div>
+
+                    <form class="comment-input" onSubmit={handleCommentSubmit}>
+                        <p>댓글 목록</p>
+                        <input type="text" placeholder="닉네임을 작성해주세요." value={nickname} onChange={handleNicknameChange} />
+                        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
+                            <input type="text" placeholder="댓글을 작성해주세요." value={newComment} onChange={handleCommentChange} />
+                            <button type="submit">등록</button>
+                        </div>
+                    </form>
+                </div>
+            )}
 
             <div className="bottom-left-buttons">
                 <button className="button">?</button>
