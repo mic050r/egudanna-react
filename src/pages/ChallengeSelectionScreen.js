@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { FaCheckCircle, FaRegCircle } from "react-icons/fa";
 import '../css/screen.css';
-import searchImage from '../img/blackSearch.png';
+import searchImage from '../img/screen/search.svg';
+import bracketUpIcon from '../img/screen/up-bracket.svg';
+import bracketDownIcon from '../img/screen/down-bracket.svg';
 
 // 가상의 JSON 데이터
 const barData = [
@@ -92,7 +94,7 @@ function App() {
   return (
     <div className="screen-container">
       <div className="search-bar">
-        <input type="text" className="bar-search" placeholder="추고 싶은 챌린지 선택" />
+        <input type="text" className="bar-search" placeholder="추고 싶은 챌린지 검색" />
         <img src={searchImage} className="bar-button" alt="Search" />
       </div>
 
@@ -107,9 +109,9 @@ function App() {
                 <div className='item-drop'>{getCategoryIcon('All')}</div>
                 All
               </div>
-              <div onClick={() => handleCategorySelect('A')} className="dropdown-item">
-                <div className='item-drop'>{getCategoryIcon('A')}</div>
-                A
+              <div onClick={() => handleCategorySelect('투모로우 바이 투게더')} className="dropdown-item">
+                <div className='item-drop'>{getCategoryIcon('투모로우 바이 투게더')}</div>
+                투모로우 바이 투게더
               </div>
               <div onClick={() => handleCategorySelect('B')} className="dropdown-item">
                 <div className='item-drop'>{getCategoryIcon('B')}</div>
@@ -157,7 +159,7 @@ function App() {
             onMouseEnter={() => handleBarHover(bar.id)}
             onMouseLeave={handleBarLeave}
           >
-            {hoveredBar === bar.id && (
+            {hoveredBar !== bar.id ? (
               <div className="bar-info">
                 <div className="bar-title">
                   <img src={bar.profileImage} alt="Profile" />
@@ -165,7 +167,7 @@ function App() {
                 </div>
                 <p className='bar-level'>LV.{bar.level}</p>
               </div>
-            )}
+            ) : <div></div>}
           </div>
         ))}
       </div>

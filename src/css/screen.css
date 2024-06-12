@@ -1,7 +1,7 @@
-:root{
-  --bar-padding: 30px;
+:root {
+  --bar-padding: 15px;
 
-  --skyblue-color: #D7E2EB;
+  --sub-color: #FFDDF1;
 }
 
 .screen-container {
@@ -11,10 +11,11 @@
   padding: 10vh 0;
   display: flex;
   flex-direction: column;
-  justify-content:start;
+  justify-content: start;
   align-items: center;
   overflow: auto;
   gap: 50px;
+  z-index: 1;
 }
 
 .difficulty-button-container {
@@ -29,7 +30,7 @@
 }
 
 .difficulty-button {
-  width:120px;
+  width: 120px;
   padding: 10px;
   margin: 10px;
   display: flex;
@@ -38,18 +39,19 @@
   flex-direction: row;
   background-color: #ffffff;
   color: black;
-  border: 1px solid var(--skyblue-color);
+  border: 1px solid var(--sub-color);
   border-radius: 10px;
   cursor: pointer;
 }
 
-.difficulty-button > div{
+.difficulty-button>div {
   width: fit-content;
-  
+  font-weight: 400;
   font-size: 15px;
 }
 
-.dropdown-container{
+.dropdown-container {
+  position: relative;
   width: 100%;
   display: flex;
   align-items: center;
@@ -58,11 +60,11 @@
 }
 
 .difficulty-dropdown {
-  position: absolute;
-  top: 100%;
-  width: 200px;
+  position: fixed;
+  top: 27%;
+  width: 230px;
   background-color: #ffffff;
-  border: 1px solid var(--skyblue-color);
+  border: 1px solid var(--sub-color);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -71,23 +73,27 @@
   text-align: left;
   border-radius: 10px;
   color: #4E4E4E;
-  z-index: 1000;
+  z-index: 10000;
 }
 
 .dropdown-item {
   padding: 10px;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: left;
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  color: black; /* 기본 텍스트 색상 검정색으로 설정 */
+  color: black;
+  width: fit-content;
+  /* 기본 텍스트 색상 검정색으로 설정 */
 }
 
 .item-drop {
-  color: #D7E2EB; /* 아이콘 색상 */
-  margin-right: 5px; /* 아이콘과 텍스트 사이의 간격 */
+  width: fit-content;
+  color: #FFDDF1;
+  margin-right: 5px;
 }
 
 
@@ -95,43 +101,45 @@
   background-color: #f0f0f0;
   cursor: pointer;
 }
+
 .search-bar {
   width: 60%;
   height: 50px;
   display: flex;
   flex-direction: row;
-  border: 1px solid var(--skyblue-color);
-  border-radius: 5px;
+  border: 1px solid #FF53BA;
   box-sizing: border-box;
 }
 
-.bar-search{
+.bar-search {
   font-size: 20px;
   width: 100%;
   height: 100%;
   padding-left: 10px;
-  border:  0;
+  border: 0;
   outline: none;
 }
 
-.bar-search::placeholder{
+.bar-search::placeholder {
   text-align: center;
   font-weight: bold;
+  color: var(--sub-color);
 }
 
-.bar-search:focus{
+.bar-search:focus {
   outline: none;
 }
 
-.bar-button{
+.bar-button {
   width: 30px;
   height: 30px;
   margin: 10px;
 }
 
-.bar-button:hover{
+.bar-button:hover {
   cursor: pointer;
 }
+
 .grid {
   width: auto;
   display: grid;
@@ -142,35 +150,44 @@
 .bar {
   background-color: #D9D9D9;
   width: 14vw;
-  height: 22vw;
+  height: 20vw;
   border-radius: 5px;
   position: relative;
 }
-.bar:hover{
+
+.bar:hover {
   cursor: pointer;
 }
 
-.bar-title{
-  position:absolute;
+.bar-title {
+  position: absolute;
   top: var(--bar-padding);
   left: var(--bar-padding);
   display: flex;
-  gap: 10px;
+  gap: 5px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
-.bar-img{
+
+.bar-title>img {
+  background-color: #FFDDF1;
   border-radius: 50%;
-  background-color: var(--skyblue-color);
+  width: 30px;
+  height: 30px;
+}
+
+.bar-img {
+  border-radius: 50%;
+  background-color: var(--sub-color);
   width: var(--bar-padding);
   height: var(--bar-padding);
 }
-.bar-name{
 
-}
-.bar-level{
-  position:absolute;
+.bar-name {}
+
+.bar-level {
+  position: absolute;
   right: var(--bar-padding);
   bottom: var(--bar-padding);
 }
