@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FaReact } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
 import { FiTrash } from 'react-icons/fi';
@@ -9,14 +9,85 @@ import userIcon from '../img/sorts/user.svg';
 import musicIcon from '../img/sorts/music.svg';
 import '../css/sorts.css';
 
-function App() {
+const barData = [
+    {
+        id: 1,
+        name: 'Jane Smith',
+        title: '제목입니다',
+        video: '/videos/example.mp4',
+        songs: [
+            '노래1',
+            '노래2',
+        ],
+        likes: 0,
+        comments: [],
+    },
+    {
+        id: 2,
+        name: 'Jane Smith',
+        title: '제목입니다',
+        video: '/videos/example.mp4',
+        songs: [
+            '노래1',
+            '노래4',
+        ],
+        likes: 5,
+        comments: [],
+    },
+    {
+        id: 3,
+        name: 'Jane Smith',
+        title: '제목입니다',
+        video: '/videos/example.mp4',
+        songs: [
+            '노래1',
+            '노래2',
+            '노래3',
+            '노래4',
+        ],
+        likes: 1,
+        comments: [],
+    },
+];
+
+const App = () => {
+    const [hoveredBar, setHoveredBar] = useState(null);
+
     const [commentOpen, setCommentOpen] = useState(false);
-    const [heartCount, setHeartCount] = useState(0);
-    const [liked, setLiked] = useState(false); // New state for like button
+    const [heartCount, setHeartCount] = useState(   0);
+    const [liked, setLiked] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [isRecording, setIsRecording] = useState(false);
-    const [showConfirmation, setShowConfirmation] = useState(false); // State to handle confirmation div
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const videoRefs = useRef({});
+
+    useEffect(() => {
+        const handleWheel = (event) => {
+            if (event.deltaY > 0) {
+                setTimeout(function () {
+                    if (currentIndex < barData.length - 1) {
+                        setCurrentIndex(currentIndex + 1);
+                        setLiked(false);
+                    }
+                }, 150);
+            } else {
+                setTimeout(function () {
+                    if (currentIndex > 0) {
+                        setCurrentIndex(currentIndex - 1);
+                        setLiked(false);
+                    }
+                }, 150);
+            }
+        };
+
+        window.addEventListener('wheel', handleWheel);
+
+        return () => {
+            window.removeEventListener('wheel', handleWheel);
+        };
+    }, [currentIndex]);
 
     const toggleCommentSection = () => {
         setCommentOpen(!commentOpen);
@@ -24,7 +95,8 @@ function App() {
 
     const incrementHeartCount = () => {
         setHeartCount(heartCount + 1);
-        setLiked(true); // Set liked to true when the button is clicked
+        setLiked(true);
+        barData[currentIndex].likes += 1;
     };
 
     const handleCommentChange = (e) => {
@@ -36,6 +108,7 @@ function App() {
         if (newComment.trim() !== '') {
             setComments([...comments, newComment]);
             setNewComment('');
+            barData[currentIndex].comments.push(newComment);
         }
     };
 
@@ -44,7 +117,7 @@ function App() {
     };
 
     const handleTrashClick = () => {
-        setShowConfirmation(!showConfirmation); // Toggle confirmation div visibility
+        setShowConfirmation(!showConfirmation);
     };
 
     return (
@@ -55,66 +128,103 @@ function App() {
             </div>
 
             <div className="image-wrapper">
-                <button className="trash-button" onClick={handleTrashClick}>
-                    <FiTrash />
-                </button>
-                {showConfirmation && (
-                    <div className="confirmation-div">
-                        <span>Are you sure?</span>
-                        <button onClick={() => setShowConfirmation(false)}>Confirm</button>
+                {barData.length > 0 && (
+                    <div key={barData[currentIndex].id}>
+                        <video
+                            className="bar-info"
+                            ref={(el) => {
+                                if (el) {
+                                    videoRefs.current[barData[currentIndex].id] = el;
+                                    videoRefs.current[barData[currentIndex].id].play();
+                                }
+                            }}
+                            autoPlay={hoveredBar === barData[currentIndex].id}
+                            loop
+                            muted
+                        >
+                            <source src={barData[currentIndex].video} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                        <button className="trash-button" onClick={handleTrashClick}>
+                            <FiTrash />
+                        </button>
+                        {showConfirmation && (
+                            <div className="confirmation-div">
+                                <span>Are you sure?</span>
+                                <button onClick={() => setShowConfirmation(false)}>Confirm</button>
+                            </div>
+                        )}
+                        <div className="buttons">
+                            <div className="heart-container">
+                                <button className="button" onClick={incrementHeartCount}>
+                                    <img src={liked ? likeOnIcon : likeIcon} alt="Heart" className="icon" />
+                                </button>
+                                <span className="heart-count" style={{ color: liked ? '#F24E1E' : 'white' }}>{barData[currentIndex].likes}</span>
+                            </div>
+                            <div className="comment-container">
+                                <button className="button" onClick={toggleCommentSection}>
+                                    <img src={commentIcon} alt="Comment" className="icon" />
+                                </button>
+                                <span className="comment-count">{comments.length}</span>
+                            </div>
+                        </div>
+                        <div className="left-sidebar">
+                            <div className="sidebar-item">
+                                <img src={userIcon} className='item-icon' /> {barData[currentIndex].name}
+                            </div>
+                            <div className="sidebar-item">{barData[currentIndex].title}</div>
+                            <div className="sidebar-item">
+                                <img src={musicIcon} className='item-icon' />
+                                <ul className="song-list">
+                                    {barData[currentIndex].songs.map((song, index) => (
+                                        <li key={index}>{song}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                        {commentOpen && (
+                            <div className="comment-section">
+                                <form onSubmit={handleCommentSubmit}>
+                                    <input type="text" value={newComment} onChange={handleCommentChange} />
+                                    <button type="submit">Add Comment</button>
+                                </form>
+                                <ul>
+                                    {comments.map((comment, index) => (
+                                        <li key={index}>{comment}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     </div>
                 )}
-                <div className="buttons">
-                    <div className="heart-container">
-                        <button className="button" onClick={incrementHeartCount}>
-                            <img src={liked ? likeOnIcon : likeIcon} alt="Heart" className="icon" />
-                        </button>
-                        <span className="heart-count" style={{ color: liked ? 'red' : 'white' }}>{heartCount}</span>
-                    </div>
-                    <div className="comment-container">
-                        <button className="button" onClick={toggleCommentSection}>
-                            <img src={commentIcon} alt="Comment" className="icon" />
-                        </button>
-                        <span className="comment-count">{comments.length}</span>
-                    </div>
-                </div>
-                <div className="left-sidebar">
-                    <div className="sidebar-item">
-                        <img src={userIcon} className='item-icon'/> 사용자 이름
-                    </div>
-                    <div className="sidebar-item">제목 내용</div>
-                    <div className="sidebar-item">
-                    <img src={musicIcon} className='item-icon'/> 
-                        <ul className="song-list">
-                            <li>Wonka 1971 Oompa Loo</li>
-                            <li>Wonka 1971 Oompa Loo</li>
-                            <li>Wonka 1971 Oompa Loo</li>
-                            <li>웡카</li>
-                            <li>노래 3</li>
-                        </ul>
-                    </div>
-                </div>
             </div>
-            {
-                commentOpen && (
-                    <div className="comment-section">
-                        
-                    </div>
-                )
-            }
+
             <div className="bottom-left-buttons">
                 <button className="button">?</button>
                 {!isRecording ? (
                     <button className="button" onClick={handleStartRecording}>+</button>
                 ) : (
-                    <button className="start-recording" onClick={() => window.location.href= '/screen'}>촬영 시작하기</button>
+                    <button className="start-recording" onClick={() => window.location.href = '/screen'}>촬영 시작하기</button>
                 )}
             </div>
-            <div className="next-image-wrapper ">
-
-            </div>
-        </div >
+            {currentIndex < barData.length - 1 && (
+                <video className="next-image-wrapper"
+                    ref={(el) => {
+                        if (el) {
+                            videoRefs.current[barData[currentIndex + 1].id] = el;
+                            videoRefs.current[barData[currentIndex + 1].id].pause();
+                        }
+                    }}
+                    autoPlay={hoveredBar === barData[currentIndex + 1].id}
+                    loop
+                    muted
+                >
+                    <source src={barData[currentIndex + 1].video} type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            )}
+        </div>
     );
 }
 
-export default App;
+export default App

@@ -1,5 +1,5 @@
 :root {
-  --sorts-main-screen-width: 450px;
+  --sorts-main-screen-width: 380px;
   --sorts-main-screen-height: 650px;
 }
 
@@ -90,18 +90,20 @@ body {
   background-size: cover;
   position: relative;
   border-radius: 20px;
-  background-color: rgb(0, 0, 0);
   
   overflow: hidden;
 }
 
+source{
+  background-size: CENTER;
+}
+
 .next-image-wrapper {
-  width: calc(var(--sorts-main-screen-width) / 2);
+  width: calc(var(--sorts-main-screen-width) / );
   height: calc(var(--sorts-main-screen-height) / 2);
   position: absolute;
   bottom: calc(var(--sorts-main-screen-height) / -3);
   border-radius: 20px;
-  background-color: rgb(0, 0, 0);
 }
 
 .buttons {
@@ -149,7 +151,21 @@ body {
 }
 
 .comment-section {
+  position: absolute;
+  top: 0;
+  right: calc(var(--sorts-main-screen-width) + 10px); /* Adjust the right position */
+  width: 250px; /* Adjust the width according to your preference */
+  height: 100%; /* Occupy the full height of the image wrapper */
+  background-color: rgba(255, 255, 255, 0.1); /* Adjust background color and opacity */
+  border-radius: 20px; /* Apply border radius */
+  padding: 20px; /* Add padding for content */
+  box-sizing: border-box; /* Include padding in width and height calculation */
+  display: flex; /* Make it a flex container */
+  flex-direction: column; /* Stack comments vertically */
+  gap: 10px; /* Add gap between comments */
+  overflow-y: auto; /* Enable vertical scrolling if needed */
 }
+
 
 
 .bottom-left-buttons {
