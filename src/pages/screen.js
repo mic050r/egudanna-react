@@ -94,11 +94,23 @@ function App() {
     }
   };
 
-  const filteredBarData = barData.filter(
-    (bar) =>
-      (difficulty === "All" || bar.difficulty === difficulty) &&
-      (category === "All" || bar.tags === category)
-  );
+  const filterData = (data, selectedCategory, selectedDifficulty) => {
+    let filteredData = data;
+
+    if (selectedCategory !== "All") {
+      filteredData = filteredData.filter(
+        (bar) => bar.tags === selectedCategory
+      );
+    }
+
+    if (selectedDifficulty !== "All") {
+      filteredData = filteredData.filter(
+        (bar) => bar.difficulty === selectedDifficulty
+      );
+    }
+
+    return filteredData;
+  };
 
   return (
     <div className="screen-container">
@@ -263,24 +275,26 @@ function App() {
       </div>
 
       <div className="grid">
-        {filteredBarData.map((bar, index) => (
+        {filterData(barData, category, difficulty).map((bar, index) => (
           <div
             key={index}
             className="bar"
-            onMouseEnter={() => handleBarHover(index)}
-            onMouseLeave={() => handleBarLeave(index)}
-            onClick={() => handleBarClick(index)}
+            onMouseEnter={() => handleBarHover(bar.reference_video_filename)}
+            onMouseLeave={() => handleBarLeave(bar.reference_video_filename)}
+            onClick={() => handleBarClick(bar.reference_video_filename)}
           >
             <video
               className="bar-info"
               ref={(el) => {
                 if (el) {
-                  videoRefs.current[index] = el;
-                  videoRefs.current[index].currentTime = 0;
-                  videoRefs.current[index].muted = false; // Start with volume muted
+                  videoRefs.current[bar.reference_video_filename] = el;
+                  videoRefs.current[
+                    bar.reference_video_filename
+                  ].currentTime = 0;
+                  videoRefs.current[bar.reference_video_filename].muted = false; // Start with volume muted
                 }
               }}
-              autoPlay={hoveredBar === index}
+              autoPlay={hoveredBar === bar.reference_video_filename}
               loop
             >
               <source
@@ -290,7 +304,7 @@ function App() {
               Your browser does not support the video tag.
             </video>
 
-            {hoveredBar !== index ? (
+            {hoveredBar !== bar.reference_video_filename ? (
               <div>
                 <div className="bar-title">
                   <img src={require(`../img/main-icon(4).png`)} alt="Profile" />
