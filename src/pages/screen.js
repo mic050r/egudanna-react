@@ -29,7 +29,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // hover된 bar가 있을 때, 해당 비디오를 재생하고 나머지 비디오는 멈춤
     Object.keys(videoRefs.current).forEach((key) => {
       if (hoveredBar !== null && key === hoveredBar.toString()) {
         videoRefs.current[key].play().catch((error) => {
@@ -51,8 +50,6 @@ function App() {
   };
 
   const handleBarClick = (barId) => {
-    // 여기에서 다른 페이지로 이동하는 로직을 추가합니다.
-    // 예: window.location.href = `/details/${barId}`;
     alert(`Redirect to /details/${barId}`);
   };
 
@@ -81,19 +78,11 @@ function App() {
   };
 
   const getCategoryIcon = (categoryItem) => {
-    if (category === categoryItem) {
-      return <FaCheckCircle />;
-    } else {
-      return <FaRegCircle />;
-    }
+    return category === categoryItem ? <FaCheckCircle /> : <FaRegCircle />;
   };
 
   const getDifficultyIcon = (level) => {
-    if (difficulty === level) {
-      return <FaCheckCircle />;
-    } else {
-      return <FaRegCircle />;
-    }
+    return difficulty === level ? <FaCheckCircle /> : <FaRegCircle />;
   };
 
   const filterData = (data, selectedCategory, selectedDifficulty) => {
@@ -107,7 +96,7 @@ function App() {
 
     if (selectedDifficulty !== "All") {
       filteredData = filteredData.filter(
-        (bar) => bar.difficulty === selectedDifficulty
+        (bar) => bar.difficulty.toString() === selectedDifficulty
       );
     }
 
