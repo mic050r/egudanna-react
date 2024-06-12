@@ -59,16 +59,18 @@ const App = () => {
                             setCurrentIndex(currentIndex + 1);
                             setCommentOpen(false);
                             setLiked(false);
+                            setShowConfirmation(false);
                         }
-                    }, 150);
+                    }, 400);
                 } else {
                     setTimeout(() => {
                         if (currentIndex > 0) {
                             setCurrentIndex(currentIndex - 1);
                             setCommentOpen(false);
                             setLiked(false);
+                            setShowConfirmation(false);
                         }
-                    }, 150);
+                    }, 400);
                 }
             }
         };
@@ -152,12 +154,6 @@ const App = () => {
                         <button className="trash-button" onClick={handleTrashClick}>
                             <FiTrash />
                         </button>
-                        {showConfirmation && (
-                            <div className="confirmation-div">
-                                <span>Are you sure?</span>
-                                <button onClick={() => setShowConfirmation(false)}>Confirm</button>
-                            </div>
-                        )}
                         <div className="buttons">
                             <div className="heart-container">
                                 <button className="button" onClick={incrementHeartCount}>
@@ -189,6 +185,28 @@ const App = () => {
                     </div>
                 )}
             </div>
+
+
+            {showConfirmation && (
+                <div className="confirmation-div">
+                    <p>영상 삭제</p>
+                    <div>
+                        <input type="text" placeholder="영상을 업로드했을 때 입력했던 비밀번호를 입력해주세요."></input>
+                        <button onClick={() => {
+                            return (
+                                <div className="confirmation-overlay">
+                                    <p>정말 영상을 영구 삭제하시겠습니까?</p>
+                                    <div>
+                                        <button>아니오</button>
+                                    </div>
+                                </div>)
+                        }}>확인</button>
+                    </div>
+                </div>
+            )}
+
+
+
             {commentOpen && (
                 <div className="comment-section">
                     <div>
