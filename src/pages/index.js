@@ -7,7 +7,7 @@ function App() {
     <div className="full-screen-image">
       <div className="content-top-image"></div>
       <div className="content-bottom-image"></div>
-      <button className="bottom-right-button"></button>
+      <button className="bottom-right-button" onClick={() => window.location.href= '/sorts'}></button>
     </div>
   );
 }
