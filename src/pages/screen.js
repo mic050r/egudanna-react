@@ -28,24 +28,26 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    // hover된 bar가 있을 때, 해당 비디오를 재생하고 나머지 비디오는 멈춤
+    Object.keys(videoRefs.current).forEach((key) => {
+      if (hoveredBar !== null && key === hoveredBar.toString()) {
+        videoRefs.current[key].play().catch((error) => {
+          console.error("Error playing video:", error);
+        });
+      } else {
+        videoRefs.current[key].pause();
+        videoRefs.current[key].currentTime = 0;
+      }
+    });
+  }, [hoveredBar]);
+
   const handleBarHover = (barId) => {
     setHoveredBar(barId);
-    if (videoRefs.current[barId]) {
-      videoRefs.current[barId].play().catch((error) => {
-        console.error("Error playing video:", error);
-      });
-      videoRefs.current[barId].muted = false;
-      videoRefs.current[barId].volume = 1;
-    }
   };
 
-  const handleBarLeave = (barId) => {
+  const handleBarLeave = () => {
     setHoveredBar(null);
-    if (videoRefs.current[barId]) {
-      videoRefs.current[barId].pause();
-      videoRefs.current[barId].currentTime = 0;
-      videoRefs.current[barId].muted = false;
-    }
   };
 
   const handleBarClick = (barId) => {
@@ -111,6 +113,8 @@ function App() {
 
     return filteredData;
   };
+
+  const filteredData = filterData(barData, category, difficulty);
 
   return (
     <div className="screen-container">
@@ -275,12 +279,12 @@ function App() {
       </div>
 
       <div className="grid">
-        {filterData(barData, category, difficulty).map((bar, index) => (
+        {filteredData.map((bar, index) => (
           <div
-            key={index}
+            key={bar.reference_video_filename} // 고유한 key를 사용하여 컴포넌트가 올바르게 렌더링되도록
             className="bar"
             onMouseEnter={() => handleBarHover(bar.reference_video_filename)}
-            onMouseLeave={() => handleBarLeave(bar.reference_video_filename)}
+            onMouseLeave={() => handleBarLeave()}
             onClick={() => handleBarClick(bar.reference_video_filename)}
           >
             <video
@@ -291,11 +295,12 @@ function App() {
                   videoRefs.current[
                     bar.reference_video_filename
                   ].currentTime = 0;
-                  videoRefs.current[bar.reference_video_filename].muted = false; // Start with volume muted
+                  videoRefs.current[bar.reference_video_filename].muted = true;
                 }
               }}
               autoPlay={hoveredBar === bar.reference_video_filename}
               loop
+              muted
             >
               <source
                 src={`/videos/${bar.reference_video_filename}.mp4`}
