@@ -1,7 +1,7 @@
 :root {
   --bar-padding: 15px;
-
-  --sub-color: #FFDDF1;
+  --main-color: #ff53ba;
+  --sub-color: #ffddf1;
 }
 
 .screen-container {
@@ -44,7 +44,7 @@
   cursor: pointer;
 }
 
-.difficulty-button>div {
+.difficulty-button > div {
   width: fit-content;
   font-weight: 400;
   font-size: 15px;
@@ -73,7 +73,7 @@
   align-items: left;
   text-align: left;
   border-radius: 10px;
-  color: #4E4E4E;
+  color: #4e4e4e;
   z-index: 10000;
 }
 
@@ -93,10 +93,9 @@
 
 .item-drop {
   width: fit-content;
-  color: #FFDDF1;
+  color: #ffddf1;
   margin-right: 5px;
 }
-
 
 .dropdown-item:hover {
   background-color: #f0f0f0;
@@ -110,7 +109,7 @@
   height: 50px;
   display: flex;
   flex-direction: row;
-  border: 1px solid #FF53BA;
+  border: 1px solid #ff53ba;
   box-sizing: border-box;
 }
 
@@ -151,16 +150,16 @@
 }
 
 .bar {
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   width: 14vw;
   height: 22vw;
   border-radius: 5px;
   position: relative;
 }
-.bar-info{
+.bar-info {
   width: 100%;
   height: 100%;
-  object-fit:cover;
+  object-fit: cover;
   border-radius: 5px;
   z-index: 1;
 }
@@ -180,8 +179,8 @@
   z-index: 2;
 }
 
-.bar-title>img {
-  background-color: #FFDDF1;
+.bar-title > img {
+  background-color: #ffddf1;
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -197,7 +196,11 @@
 }
 
 .bar-name {
-  z-index: 2;}
+  z-index: 2;
+  background-color: #fff;
+  color: var(--main-color);
+  font-weight: bold;
+}
 
 .bar-level {
   position: absolute;
@@ -206,6 +209,6 @@
   z-index: 2;
 }
 
-.comment-section{
+.comment-section {
   position: absolute;
 }
