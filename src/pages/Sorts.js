@@ -107,7 +107,7 @@ function App() {
                 {!isRecording ? (
                     <button className="button" onClick={handleStartRecording}>+</button>
                 ) : (
-                    <button className="start-recording">촬영 시작하기</button>
+                    <button className="start-recording" onClick={() => window.location.href= '/screen'}>촬영 시작하기</button>
                 )}
             </div>
             <div className="next-image-wrapper ">

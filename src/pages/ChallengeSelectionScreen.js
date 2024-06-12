@@ -11,7 +11,7 @@ const barData = [
     id: 1,
     name: 'John Doe',
     level: "2",
-    profileImage: '../img/main-icon(4).png',
+    profileImage: '../img/main-icon(3).png',
     category: 'A'
   },
   {
@@ -162,7 +162,7 @@ function App() {
             {hoveredBar !== bar.id ? (
               <div className="bar-info">
                 <div className="bar-title">
-                  <img src={bar.profileImage} alt="Profile" />
+                  <img src={require(bar.profileImage)} alt="Profile" />
                   <p className='bar-name'>{bar.name}</p>
                 </div>
                 <p className='bar-level'>LV.{bar.level}</p>
