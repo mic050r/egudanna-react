@@ -24,10 +24,9 @@ const PublishForm = ({
       likeNum: 0,
       title,
       nickname,
-      hashtag: tags.join(" "),
+      hashtag: tags.join("/") + "/" + challenge_name,
       email,
       password,
-      challenge_name,
     };
     onPublish(data);
   };
