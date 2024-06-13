@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { FiSearch, FiTrash } from 'react-icons/fi';
-import likeIcon from '../img/sorts/likes.svg';
-import likeOnIcon from '../img/sorts/likes-on.svg';
-import commentIcon from '../img/sorts/comment.svg';
-import userIcon from '../img/sorts/user.svg';
-import musicIcon from '../img/sorts/music.svg';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import SearchBar from '../components/sorts/SearchBar';
+import VideoPlayer from '../components/sorts/VideoPlayer';
+import SideBar from '../components/sorts/SideBar';
+import ConfirmationDialog from '../components/sorts/ConfirmationDialog';
+import CommentSection from '../components/sorts/CommentSection';
 import '../css/sorts.css';
 
 const barData = [
@@ -48,12 +48,29 @@ const App = () => {
     const [isRecording, setIsRecording] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const videoRefs = useRef({});
+    const [ challenges, setChallenges ] = useState([]);
 
+    useEffect(() => {
+        getCallenge();
+
+    }, [])
+
+    const getCallenge = async () => {
+        try{
+            let response = await axios.get(`${process.env.REACT_APP_HOST}/api/challenges`);
+            console.log(response.data);
+            setChallenges(response.data);
+        }catch(err){
+            console.error(err);
+        }
+    }
+
+    // 마우스 휠 이벤트 핸들러
     useEffect(() => {
         const handleWheel = (event) => {
             if (!commentOpen) {
                 if (event.deltaY > 0) {
+                    // 스크롤 다운
                     setTimeout(() => {
                         if (currentIndex < barData.length - 1) {
                             setCurrentIndex(currentIndex + 1);
@@ -63,6 +80,7 @@ const App = () => {
                         }
                     }, 400);
                 } else {
+                    // 스크롤 업
                     setTimeout(() => {
                         if (currentIndex > 0) {
                             setCurrentIndex(currentIndex - 1);
@@ -82,32 +100,37 @@ const App = () => {
         };
     }, [currentIndex, commentOpen]);
 
+    // 댓글 섹션 토글 함수
     const toggleCommentSection = () => {
         setCommentOpen(!commentOpen);
     };
 
+    // 좋아요 증가 함수
     const incrementHeartCount = () => {
         setHeartCount(heartCount + 1);
         setLiked(true);
         barData[currentIndex].likes += 1;
     };
 
+    // 댓글 입력 변경 핸들러
     const handleCommentChange = (e) => {
         setNewComment(e.target.value);
     };
 
+    // 닉네임 입력 변경 핸들러
     const handleNicknameChange = (e) => {
         setNickname(e.target.value);
     };
 
+    // 댓글 제출 핸들러
     const handleCommentSubmit = (e) => {
         e.preventDefault();
         if (newComment.trim() !== '' && nickname.trim() !== '') {
             setComments([...comments,
-            <div className='input-things'>
-                <p>{nickname}</p>
-                <p>{newComment}</p>
-            </div>]);
+                <div className='input-things'>
+                    <p>{nickname}</p>
+                    <p>{newComment}</p>
+                </div>]);
             setNewComment('');
             setNickname('');
             barData[currentIndex].comments.push(
@@ -118,115 +141,44 @@ const App = () => {
         }
     };
 
+    // 녹화 시작 함수
     const handleStartRecording = () => {
         setIsRecording(true);
     };
 
+    // 휴지통 버튼 클릭 핸들러
     const handleTrashClick = () => {
         setShowConfirmation(!showConfirmation);
     };
 
     return (
         <div className="container">
-            <div className="search-bar-sorts">
-                <input type="text" placeholder="찾고 있는 영상을 검색하세요!" className="search-input" />
-                <button className="search-button"><FiSearch /></button>
-            </div>
-
+            <SearchBar />
             <div className="image-wrapper">
                 {barData.length > 0 && (
                     <div key={barData[currentIndex].id}>
-                        <video
-                            className="bar-info"
-                            ref={(el) => {
-                                if (el) {
-                                    videoRefs.current[barData[currentIndex].id] = el;
-                                    videoRefs.current[barData[currentIndex].id].play();
-                                }
-                            }}
-                            autoPlay={hoveredBar === barData[currentIndex].id}
-                            loop
-                            muted
-                        >
-                            <source src={barData[currentIndex].video} type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>
-                        <button className="trash-button" onClick={handleTrashClick}>
-                            <FiTrash />
-                        </button>
-                        <div className="buttons">
-                            <div className="heart-container">
-                                <button className="button" onClick={incrementHeartCount}>
-                                    <img src={liked ? likeOnIcon : likeIcon} alt="Heart" className="icon" />
-                                </button>
-                                <span className="heart-count" style={{ color: liked ? '#F24E1E' : 'white' }}>{barData[currentIndex].likes}</span>
-                            </div>
-                            <div className="comment-container">
-                                <button className="button" onClick={toggleCommentSection}>
-                                    <img src={commentIcon} alt="Comment" className="icon" />
-                                </button>
-                                <span className="comment-count">{barData[currentIndex].comments.length}</span>
-                            </div>
-                        </div>
-                        <div className="left-sidebar">
-                            <div className="sidebar-item">
-                                <img src={userIcon} className='item-icon' /> {barData[currentIndex].name}
-                            </div>
-                            <div className="sidebar-item">{barData[currentIndex].title}</div>
-                            <div className="sidebar-item">
-                                <img src={musicIcon} className='item-icon' />
-                                <ul className="song-list">
-                                    {barData[currentIndex].songs.map((song, index) => (
-                                        <li key={index}>{song}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
+                        <VideoPlayer
+                            videoData={barData[currentIndex]}
+                            onTrashClick={handleTrashClick}
+                            incrementHeartCount={incrementHeartCount}
+                            toggleCommentSection={toggleCommentSection}
+                            liked={liked}
+                        />
+                        <SideBar videoData={barData[currentIndex]} />
                     </div>
                 )}
             </div>
-
-
-            {showConfirmation && (
-                <div className="confirmation-div">
-                    <p>영상 삭제</p>
-                    <div>
-                        <input type="text" placeholder="영상을 업로드했을 때 입력했던 비밀번호를 입력해주세요."></input>
-                        <button onClick={() => {
-                            return (
-                                <div className="confirmation-overlay">
-                                    <p>정말 영상을 영구 삭제하시겠습니까?</p>
-                                    <div>
-                                        <button>아니오</button>
-                                    </div>
-                                </div>)
-                        }}>확인</button>
-                    </div>
-                </div>
-            )}
-
-
-
-            {commentOpen && (
-                <div className="comment-section">
-                    <div>
-                        <button onClick={toggleCommentSection}>X</button>
-                        {barData[currentIndex].comments.map((comment, index) => (
-                            <div key={index}>{comment}</div>
-                        ))}
-                    </div>
-
-                    <form class="comment-input" onSubmit={handleCommentSubmit}>
-                        <p>댓글 목록</p>
-                        <input type="text" placeholder="닉네임을 작성해주세요." value={nickname} onChange={handleNicknameChange} />
-                        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
-                            <input type="text" placeholder="댓글을 작성해주세요." value={newComment} onChange={handleCommentChange} />
-                            <button type="submit">등록</button>
-                        </div>
-                    </form>
-                </div>
-            )}
-
+            <ConfirmationDialog showConfirmation={showConfirmation} handleTrashClick={handleTrashClick} />
+            <CommentSection
+                commentOpen={commentOpen}
+                toggleCommentSection={toggleCommentSection}
+                comments={barData[currentIndex].comments}
+                handleCommentSubmit={handleCommentSubmit}
+                newComment={newComment}
+                handleCommentChange={handleCommentChange}
+                nickname={nickname}
+                handleNicknameChange={handleNicknameChange}
+            />
             <div className="bottom-left-buttons">
                 <button className="button">?</button>
                 {!isRecording ? (
@@ -237,15 +189,10 @@ const App = () => {
             </div>
             {currentIndex < barData.length - 1 && (
                 <video className="next-image-wrapper"
-                    ref={(el) => {
-                        if (el) {
-                            videoRefs.current[barData[currentIndex + 1].id] = el;
-                            videoRefs.current[barData[currentIndex + 1].id].pause();
-                        }
-                    }}
                     autoPlay={hoveredBar === barData[currentIndex + 1].id}
                     loop
                     muted
+                    disablePictureInPicture
                 >
                     <source src={barData[currentIndex + 1].video} type="video/mp4" />
                     Your browser does not support the video tag.
@@ -255,4 +202,4 @@ const App = () => {
     );
 }
 
-export default App
+export default App;
