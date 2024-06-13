@@ -314,7 +314,7 @@ function App() {
                     ].currentTime = 0;
                     videoRefs.current[
                       bar.reference_video_filename
-                    ].muted = true;
+                    ].muted = false;
                   }
                 }}
                 autoPlay={hoveredBar === bar.reference_video_filename}
@@ -327,20 +327,13 @@ function App() {
                 />
                 Your browser does not support the video tag.
               </video>
-              {hoveredBar !== bar.reference_video_filename ? (
-                <div>
-                  <div className="bar-title">
-                    <img
-                      src={require(`../img/main-icon(4).png`)}
-                      alt="Profile"
-                    />
-                    <p className="bar-name">{bar.challenge_name}</p>
-                  </div>
-                  <p className="bar-level">LV.{bar.difficulty}</p>
+              <div>
+                <div className="bar-title">
+                  <img src={require(`../img/main-icon(4).png`)} alt="Profile" />
+                  <p className="bar-name">{bar.challenge_name}</p>
                 </div>
-              ) : (
-                <div></div>
-              )}
+                <p className="bar-level">LV.{bar.difficulty}</p>
+              </div>
             </Link>
           </div>
         ))}
