@@ -24,7 +24,7 @@ const PublishForm = ({
       likeNum: 0,
       title,
       nickname,
-      hashtag: tags.join("#"),
+      hashtag: tags.join(" "),
       email,
       password,
       challenge_name,
@@ -96,7 +96,7 @@ const PublishForm = ({
             **이메일을 입력하면 영상을 받을 수 있어요!
           </p>
           <div className="button-group">
-            <button onClick={onCancel} className="cancel">
+            <button type="button" onClick={onCancel} className="cancel">
               취소
             </button>
             <button type="submit" className="submit">

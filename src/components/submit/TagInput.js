@@ -4,9 +4,11 @@ import "../../css/record/tag.css";
 function TagInput({ tags, setTags }) {
   const [inputText, setInputText] = useState("");
 
-  const handleTagAdd = () => {
+  const handleTagAdd = (e) => {
+    e.preventDefault(); // 폼의 기본 제출 동작 막기
+
     if (inputText.trim() !== "") {
-      setTags([...tags, inputText.trim()]);
+      setTags([...tags, inputText.trim()]); // 입력된 내용 그대로 저장
       setInputText("");
     }
   };
@@ -23,7 +25,8 @@ function TagInput({ tags, setTags }) {
 
   const handleInputKeyPress = (e) => {
     if (e.key === "Enter") {
-      handleTagAdd();
+      e.preventDefault(); // 폼의 기본 제출 동작 막기
+      handleTagAdd(e);
     }
   };
 
@@ -32,7 +35,7 @@ function TagInput({ tags, setTags }) {
       <div id="outputContainer">
         {tags.map((tag, index) => (
           <div key={index} className="taggedContent">
-            #{tag}
+            {tag}
             <span
               className="deleteButton"
               onClick={() => handleTagDelete(index)}
@@ -46,7 +49,7 @@ function TagInput({ tags, setTags }) {
             type="text"
             id="inputText"
             value={inputText}
-            placeholder="#태그 입력"
+            placeholder="태그 입력"
             onChange={handleInputChange}
             onKeyPress={handleInputKeyPress}
           />
