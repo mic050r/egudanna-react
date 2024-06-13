@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { FiTrash } from 'react-icons/fi';
+import trashIcon from '../../img/sorts/trash.svg';
 import likeIcon from '../../img/sorts/likes.svg';
 import likeOnIcon from '../../img/sorts/likes-on.svg';
 import commentIcon from '../../img/sorts/comment.svg';
@@ -28,7 +28,7 @@ const VideoPlayer = ({ videoData, onTrashClick, incrementHeartCount, toggleComme
                 Your browser does not support the video tag.
             </video>
             <button className="trash-button" onClick={onTrashClick}>
-                <FiTrash />
+                <img src={trashIcon} alt="Trash" className="icon" />
             </button>
             <div className="buttons">
                 <div className="heart-container">
