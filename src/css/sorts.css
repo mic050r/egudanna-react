@@ -135,7 +135,6 @@ source {
   font-size: 20px;
   white-space: nowrap;
   padding: 5px;
-  /* Add padding to ensure the icon fits well inside the button */
 }
 
 .comment-container,
@@ -198,6 +197,10 @@ source {
   background-color: #00000000;
   border: 0;
   z-index: 13;
+}
+
+.comment-section>button:hover {
+  color: #FF0099;
 }
 
 .input-things {
@@ -275,6 +278,10 @@ source {
   justify-content: center;
 }
 
+.comment-input>*>button:hover {
+  background-color: #FF53BA;
+}
+
 .bottom-left-buttons {
   position: absolute;
   bottom: calc(calc(50vh - var(--sorts-main-screen-height) / 2));
@@ -340,6 +347,10 @@ source {
   font-weight: bold;
   padding: 8px 10px;
   cursor: pointer;
+}
+
+.search-button:hover {
+  color: #FF0099;
 }
 
 .search-button:focus {
@@ -410,6 +421,10 @@ source {
   cursor: pointer;
 }
 
+.confirmation-div>div>button:hover{
+  background-color: #FF53BA;
+}
+
 
 .confirmation-div>div>input {
   font-size: 14px;
@@ -417,31 +432,40 @@ source {
   border: 0;
   border-bottom: 1px solid #FF53BA;
 }
-
 .confirmation-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  top: calc(calc(50vh - var(--sorts-main-screen-height) / 2) + 10px);
+  right: calc(calc(50vw - var(--sorts-main-screen-width) / 2) - calc(185px));
+  width: fit-content;
+  height: fit-content;
+  border-radius: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 12;
-}
-
-.confirmation-overlay>div {
+  z-index: 16;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 10px 15px;
   background-color: white;
-  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 }
 
-.confirmation-overlay>div>button {
+.confirmation-overlay  > p{
+  font-size: 10px;
+  color: #FF53BA;
+}
+
+.confirmation-overlay  > div {
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+}
+
+.confirmation-overlay > div > button {
   padding: 5px 10px;
+  font-size: 13px;
   cursor: pointer;
   border: none;
   background-color: #FF0099;
@@ -449,6 +473,6 @@ source {
   border-radius: 5px;
 }
 
-.confirmation-overlay>div>button:hover {
+.confirmation-overlay > div > button:hover {
   background-color: #FF53BA;
 }
