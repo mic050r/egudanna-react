@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Webcam from "react-webcam";
 import RecordRTC from "recordrtc";
+import axios from "axios";
 import "../../css/record/video.css";
 import CircleButton from "./CircleButton";
 import Timer from "./Timer";
@@ -10,23 +11,23 @@ import PublishForm from "../submit/PublishForm"; // 발행 폼 컴포넌트 impo
 
 const VideoPlayer = () => {
   const location = useLocation();
-
   const { challenge_name, reference_video_filename, difficulty } =
     location.state || {
       challenge_name: "default challenge",
       reference_video_filename: "default_video",
       difficulty: 1,
     };
-
   const [videoUrl, setVideoUrl] = useState(
     `/videos/${reference_video_filename}.mp4`
   );
+
   useEffect(() => {
     console.log("Location state in /record component:", location.state);
   }, [location.state]);
 
   const [recordedVideoUrl, setRecordedVideoUrl] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [uploadUrl, setUploadUrl] = useState("");
   const webcamRef = useRef(null);
   const videoRef = useRef(null);
   const [recorder, setRecorder] = useState(null);
@@ -68,18 +69,31 @@ const VideoPlayer = () => {
 
   const stopRecording = async () => {
     if (recorder) {
-      recorder.stopRecording(() => {
+      recorder.stopRecording(async () => {
         const blob = recorder.getBlob();
         const url = URL.createObjectURL(blob);
         setRecordedVideoUrl(url);
         setShowModal(true);
 
-        const downloadLink = document.createElement("a");
-        downloadLink.href = url;
-        downloadLink.download = "recorded_video.webm";
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
+        const formData = new FormData();
+        formData.append("file", blob, "recorded_video.webm");
+
+        try {
+          const response = await axios.post(
+            "http://localhost:7000/api/s3/upload",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+
+          const uploadedUrl = response.data;
+          setUploadUrl(uploadedUrl);
+        } catch (error) {
+          console.error("Error uploading video: ", error);
+        }
 
         setRecorder(null);
         setIsRecording(false);
@@ -106,8 +120,21 @@ const VideoPlayer = () => {
     setShowModal(false);
   };
 
-  const handlePublish = (data) => {
-    console.log("Published data:", data);
+  const handlePublish = async (data) => {
+    const publishData = {
+      ...data,
+      videoUrl: uploadUrl,
+      levelId: difficulty,
+      likeNum: 0,
+    };
+
+    try {
+      await axios.post("http://localhost:7000/api/challenges", publishData);
+      console.log("Published data:", publishData);
+    } catch (error) {
+      console.error("Error publishing data: ", error);
+    }
+
     setShowModal(false);
   };
 
