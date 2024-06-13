@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import SearchBar from '../components/sorts/SearchBar';
 import VideoPlayer from '../components/sorts/VideoPlayer';
 import SideBar from '../components/sorts/SideBar';
@@ -47,6 +48,22 @@ const App = () => {
     const [isRecording, setIsRecording] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [ challenges, setChallenges ] = useState([]);
+
+    useEffect(() => {
+        getCallenge();
+
+    }, [])
+
+    const getCallenge = async () => {
+        try{
+            let response = await axios.get(`${process.env.REACT_APP_HOST}/api/challenges`);
+            console.log(response.data);
+            setChallenges(response.data);
+        }catch(err){
+            console.error(err);
+        }
+    }
 
     // 마우스 휠 이벤트 핸들러
     useEffect(() => {
