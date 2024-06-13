@@ -1,61 +1,54 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 import { FaCheckCircle, FaRegCircle } from "react-icons/fa";
-import '../css/screen.css';
-import searchImage from '../img/screen/search.svg';
-
-// 가상의 JSON 데이터
-const barData = [
-  {
-    id: 1,
-    name: 'John Doe',
-    level: "2",
-    profileImage: require('../img/main-icon(4).png'),
-    video: '/videos/example.mp4',
-    category: 'A'
-  },
-  {
-    id: 2,
-    name: 'Jane Smith',
-    level: "1",
-    profileImage: require('../img/main-icon(4).png'),
-    video: '/videos/example.mp4',
-    category: 'B'
-  },
-  {
-    id: 3,
-    name: 'Jane Smith',
-    level: "2",
-    profileImage: require('../img/main-icon(4).png'),
-    video: '/videos/example.mp4',
-    category: 'B'
-  },
-  // 다른 바들의 데이터도 추가할 수 있습니다.
-];
+import { Link } from "react-router-dom";
+import "../css/screen.css";
+import searchImage from "../img/screen/search.svg";
+import barData from "../data/reference_video_data.json";
 
 function App() {
   const [hoveredBar, setHoveredBar] = useState(null);
-  const [difficulty, setDifficulty] = useState('All');
-  const [difficultyDropdownVisible, setDifficultyDropdownVisible] = useState(false);
-  const [category, setCategory] = useState('All');
+  const [difficulty, setDifficulty] = useState("All");
+  const [difficultyDropdownVisible, setDifficultyDropdownVisible] =
+    useState(false);
+  const [category, setCategory] = useState("All");
   const [categoryDropdownVisible, setCategoryDropdownVisible] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const videoRefs = useRef({});
+
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("keydown", handleUserInteraction);
+    };
+
+    document.addEventListener("click", handleUserInteraction);
+    document.addEventListener("keydown", handleUserInteraction);
+
+    return () => {
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("keydown", handleUserInteraction);
+    };
+  }, []);
+
+  useEffect(() => {
+    Object.keys(videoRefs.current).forEach((key) => {
+      if (hoveredBar !== null && key === hoveredBar.toString()) {
+        videoRefs.current[key].play().catch((error) => {
+          console.error("Error playing video:", error);
+        });
+      } else {
+        videoRefs.current[key].pause();
+        videoRefs.current[key].currentTime = 0;
+      }
+    });
+  }, [hoveredBar]);
 
   const handleBarHover = (barId) => {
     setHoveredBar(barId);
-    // 비디오 참조가 null이 아닌지 확인
-    if (videoRefs.current[barId]) {
-      // 비디오 재생
-      videoRefs.current[barId].play();
-    }
   };
 
-  const handleBarLeave = (barId) => {
+  const handleBarLeave = () => {
     setHoveredBar(null);
-    if (videoRefs.current[barId]) {
-      // 비디오 일시 정지 및 재생 시간 초기화
-      videoRefs.current[barId].pause();
-      videoRefs.current[barId].currentTime = 0;
-    }
   };
 
   const handleDifficultyClick = () => {
@@ -83,80 +76,202 @@ function App() {
   };
 
   const getCategoryIcon = (categoryItem) => {
-    if (category === categoryItem) {
-      return <FaCheckCircle />;
-    } else {
-      return <FaRegCircle />;
-    }
+    return category === categoryItem ? <FaCheckCircle /> : <FaRegCircle />;
   };
 
   const getDifficultyIcon = (level) => {
-    if (difficulty === level) {
-      return <FaCheckCircle />;
-    } else {
-      return <FaRegCircle />;
-    }
+    return difficulty === level ? <FaCheckCircle /> : <FaRegCircle />;
   };
 
-  const filteredBarData = barData.filter(bar =>
-    (difficulty === 'All' || bar.level === difficulty) &&
-    (category === 'All' || bar.category === category)
-  );
+  const filterData = (
+    data,
+    selectedCategory,
+    selectedDifficulty,
+    searchTerm
+  ) => {
+    let filteredData = data;
+
+    if (selectedCategory !== "All") {
+      filteredData = filteredData.filter(
+        (bar) => bar.tags === selectedCategory
+      );
+    }
+
+    if (selectedDifficulty !== "All") {
+      filteredData = filteredData.filter(
+        (bar) => bar.difficulty.toString() === selectedDifficulty
+      );
+    }
+
+    if (searchTerm) {
+      filteredData = filteredData.filter((bar) =>
+        bar.challenge_name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    return filteredData;
+  };
+
+  const filteredData = filterData(barData, category, difficulty, searchTerm);
 
   return (
     <div className="screen-container">
       <div className="search-bar">
-        <input type="text" className="bar-search" placeholder="추고 싶은 챌린지 검색" />
+        <input
+          type="text"
+          className="bar-search"
+          placeholder="추고 싶은 챌린지 검색"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)} // 검색어 상태 업데이트
+        />
         <img src={searchImage} className="bar-button" alt="Search" />
       </div>
 
       <div className="dropdown-container">
         <div className="difficulty-button-container">
           <button onClick={handleCategoryClick} className="difficulty-button">
-            <div>아이돌</div> <div>{categoryDropdownVisible ? '▲' : '▼'}</div>
+            <div>{category === "All" ? "아이돌" : category}</div>{" "}
+            <div>{categoryDropdownVisible ? "▲" : "▼"}</div>
           </button>
           {categoryDropdownVisible && (
             <div className="difficulty-dropdown">
-              <div onClick={() => handleCategorySelect('All')} className="dropdown-item">
-                <div className='item-drop'>{getCategoryIcon('All')}</div>
+              <div
+                onClick={() => handleCategorySelect("All")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("All")}</div>
                 All
               </div>
-              <div onClick={() => handleCategorySelect('투모로우 바이 투게더')} className="dropdown-item">
-                <div className='item-drop'>{getCategoryIcon('투모로우 바이 투게더')}</div>
-                투모로우 바이 투게더
+              <div
+                onClick={() => handleCategorySelect("에스파")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("에스파")}</div>
+                에스파
               </div>
-              <div onClick={() => handleCategorySelect('B')} className="dropdown-item">
-                <div className='item-drop'>{getCategoryIcon('B')}</div>
-                B
+              <div
+                onClick={() => handleCategorySelect("아이브")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("아이브")}</div>
+                아이브
               </div>
-              <div onClick={() => handleCategorySelect('C')} className="dropdown-item">
-                <div className='item-drop'>{getCategoryIcon('C')}</div>
-                C
+              <div
+                onClick={() => handleCategorySelect("NCT")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("NCT")}</div>
+                NCT
+              </div>
+              <div
+                onClick={() => handleCategorySelect("세븐틴")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("세븐틴")}</div>
+                세븐틴
+              </div>
+              <div
+                onClick={() => handleCategorySelect("뉴진스")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("뉴진스")}</div>
+                뉴진스
+              </div>
+              <div
+                onClick={() => handleCategorySelect("TXT")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("TXT")}</div>
+                TXT
+              </div>
+              <div
+                onClick={() => handleCategorySelect("Kiss Of Life")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">
+                  {getCategoryIcon("Kiss Of Life")}
+                </div>
+                Kiss Of Life
+              </div>
+              <div
+                onClick={() => handleCategorySelect("아이들")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("아이들")}</div>
+                아이들
+              </div>
+              <div
+                onClick={() => handleCategorySelect("엔믹스")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("엔믹스")}</div>
+                엔믹스
+              </div>
+              <div
+                onClick={() => handleCategorySelect("ITZY")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("ITZY")}</div>
+                ITZY
+              </div>
+              <div
+                onClick={() => handleCategorySelect("블랙핑크")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("블랙핑크")}</div>
+                블랙핑크
+              </div>
+              <div
+                onClick={() => handleCategorySelect("스테이씨")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("스테이씨")}</div>
+                스테이씨
+              </div>
+              <div
+                onClick={() => handleCategorySelect("트와이스")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getCategoryIcon("트와이스")}</div>
+                트와이스
               </div>
             </div>
           )}
         </div>
+
         <div className="difficulty-button-container">
           <button onClick={handleDifficultyClick} className="difficulty-button">
-            <div>난이도</div> <div>{difficultyDropdownVisible ? '▲' : '▼'}</div>
+            <div>
+              {difficulty === "All" ? "난이도" : `난이도 ${difficulty}`}
+            </div>{" "}
+            <div>{difficultyDropdownVisible ? "▲" : "▼"}</div>
           </button>
           {difficultyDropdownVisible && (
             <div className="difficulty-dropdown">
-              <div onClick={() => handleDifficultySelect('All')} className="dropdown-item">
-                <div className='item-drop'>{getDifficultyIcon('All')}</div>
+              <div
+                onClick={() => handleDifficultySelect("All")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getDifficultyIcon("All")}</div>
                 All
               </div>
-              <div onClick={() => handleDifficultySelect('1')} className="dropdown-item">
-                <div className='item-drop'>{getDifficultyIcon('1')}</div>
-                1
+              <div
+                onClick={() => handleDifficultySelect("1")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getDifficultyIcon("1")}</div>1
               </div>
-              <div onClick={() => handleDifficultySelect('2')} className="dropdown-item">
-                <div className='item-drop'>{getDifficultyIcon('2')}</div>
-                2
+              <div
+                onClick={() => handleDifficultySelect("2")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getDifficultyIcon("2")}</div>2
               </div>
-              <div onClick={() => handleDifficultySelect('3')} className="dropdown-item">
-                <div className='item-drop'>{getDifficultyIcon('3')}</div>
-                3
+              <div
+                onClick={() => handleDifficultySelect("3")}
+                className="dropdown-item"
+              >
+                <div className="item-drop">{getDifficultyIcon("3")}</div>3
               </div>
             </div>
           )}
@@ -164,45 +279,69 @@ function App() {
       </div>
 
       <div className="grid">
-        {filteredBarData.map(bar => (
+        {filteredData.map((bar) => (
           <div
-            key={bar.id}
+            key={bar.reference_video_filename} // 고유한 key를 사용하여 컴포넌트가 올바르게 렌더링되도록
             className="bar"
-            onMouseEnter={() => handleBarHover(bar.id)}
-            onMouseLeave={() => handleBarLeave(bar.id)}
+            onMouseEnter={() => handleBarHover(bar.reference_video_filename)}
+            onMouseLeave={handleBarLeave}
           >
-            <video
-              className="bar-info"
-              ref={(el) => {
-                if (el) {
-                  videoRefs.current[bar.id] = el;
-                  videoRefs.current[bar.id].currentTime = 0;
-                  // 호버 시에만 재생되도록 수정
-                  if (hoveredBar !== bar.id) {
-                    videoRefs.current[bar.id].pause();
-                    videoRefs.current[bar.id].currentTime = 0;
-                  }
-                }
+            <Link
+              to="/record"
+              state={{
+                challenge_name: bar.challenge_name,
+                reference_video_filename: bar.reference_video_filename,
+                difficulty: bar.difficulty,
+                tags: bar.tags,
               }}
-              autoPlay={hoveredBar === bar.id}
-              loop
-              muted
+              className="bar-info"
+              onClick={() =>
+                console.log("Clicked bar info. Data:", {
+                  challenge_name: bar.challenge_name,
+                  reference_video_filename: bar.reference_video_filename,
+                  difficulty: bar.difficulty,
+                  tags: bar.tags,
+                })
+              }
             >
-              <source src={bar.video} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-
-            {hoveredBar !== bar.id ?
-              <div>
-                <div className="bar-title">
-                  <img src={bar.profileImage} alt="Profile" />
-                  <p className='bar-name'>{bar.name}</p>
+              <video
+                className="bar-info"
+                ref={(el) => {
+                  if (el) {
+                    videoRefs.current[bar.reference_video_filename] = el;
+                    videoRefs.current[
+                      bar.reference_video_filename
+                    ].currentTime = 0;
+                    videoRefs.current[
+                      bar.reference_video_filename
+                    ].muted = true;
+                  }
+                }}
+                autoPlay={hoveredBar === bar.reference_video_filename}
+                loop
+                muted
+              >
+                <source
+                  src={`/videos/${bar.reference_video_filename}.mp4`}
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+              {hoveredBar !== bar.reference_video_filename ? (
+                <div>
+                  <div className="bar-title">
+                    <img
+                      src={require(`../img/main-icon(4).png`)}
+                      alt="Profile"
+                    />
+                    <p className="bar-name">{bar.challenge_name}</p>
+                  </div>
+                  <p className="bar-level">LV.{bar.difficulty}</p>
                 </div>
-                <p className='bar-level'>LV.{bar.level}</p>
-              </div>
-              :
-              <div></div>
-            }
+              ) : (
+                <div></div>
+              )}
+            </Link>
           </div>
         ))}
       </div>
