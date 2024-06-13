@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
 import RecordRTC from "recordrtc";
 import axios from "axios";
@@ -11,6 +11,7 @@ import PublishForm from "../submit/PublishForm"; // 발행 폼 컴포넌트 impo
 
 const VideoPlayer = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { challenge_name, reference_video_filename, difficulty } =
     location.state || {
       challenge_name: "default challenge",
@@ -89,8 +90,8 @@ const VideoPlayer = () => {
             }
           );
 
-          const uploadedUrl = response.data; // Make sure this is the correct path to the URL
-          setUploadUrl(uploadedUrl); // Set the URL after successful upload
+          const uploadedUrl = response.data;
+          setUploadUrl(uploadedUrl);
         } catch (error) {
           console.error("Error uploading video: ", error);
         }
@@ -131,6 +132,8 @@ const VideoPlayer = () => {
     try {
       await axios.post("http://localhost:7000/api/challenges", publishData);
       console.log("Published data:", publishData);
+      alert("영상이 발송되었습니다!");
+      navigate("/sorts");
     } catch (error) {
       console.error("Error publishing data: ", error);
     }
@@ -183,7 +186,7 @@ const VideoPlayer = () => {
           onPublish={handlePublish}
           challenge_name={challenge_name}
           difficulty={difficulty}
-          videoUrl={uploadUrl} // Pass the uploadUrl as videoUrl
+          videoUrl={uploadUrl}
         />
       </Modal>
     </div>
