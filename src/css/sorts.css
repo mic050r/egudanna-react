@@ -15,7 +15,7 @@ body {
   padding: 0;
   font-family: Arial, sans-serif;
 }
-
+input:focus {outline: none;}
 .container {
   display: flex;
   justify-content: center;
@@ -155,28 +155,19 @@ source {
 
 .comment-section {
   position: absolute;
-  right: calc(var(--sorts-main-screen-width) - 60px);
-  /* Adjust the right position */
+  right: calc(calc(50vw - var(--sorts-main-screen-width) / 2) - 320px);
   width: 300px;
   height: var(--sorts-main-screen-height);
-  /* Occupy the full height of the image wrapper */
   background-color: rgba(255, 255, 255, 0.1);
-  /* Adjust background color and opacity */
   border: 1px solid #FF53BA;
   border-radius: 15px;
-  /* Apply border radius */
   box-sizing: border-box;
-  /* Include padding in width and height calculation */
   display: flex;
-  /* Make it a flex container */
   flex-direction: column;
-  /* Stack comments vertically */
   margin: 0;
   overflow-y: hidden;
-  /* Enable vertical scrolling if needed */
   z-index: 10;
   box-sizing: border-box;
-
   background-color: white;
 }
 
@@ -197,10 +188,11 @@ source {
   box-sizing: border-box;
 }
 
-.comment-section > div::-webkit-scrollbar {
+.comment-section>div::-webkit-scrollbar {
   display: none;
 }
-.comment-section>div > button{
+
+.comment-section>button {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -211,7 +203,7 @@ source {
 }
 
 .input-things {
-  width: 100%;
+  width: calc(300px - 60px);
   display: flex;
   flex-direction: column;
   justify-content: left;
@@ -222,8 +214,9 @@ source {
 }
 
 .input-things>p {
-  width: 100%;
-  word-wrap: break-word;
+  width: 100%; 
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .input-things>p:nth-child(1) {
@@ -376,10 +369,10 @@ source {
 
 .confirmation-div {
   position: absolute;
-  top: calc(var(--sorts-main-screen-height) / 4);
-  right: calc(calc(50vw - var(--sorts-main-screen-width)) - calc(14px * 17));
+  top: calc(calc(50vh - var(--sorts-main-screen-height) / 2) + 10px);
+  right: calc(calc(50vw - var(--sorts-main-screen-width) / 2) - calc(420px));
   z-index: 11;
-  width: fit-content;
+  width: 410px;
   background-color: white;
   padding: 10px 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -392,7 +385,6 @@ source {
 }
 
 .confirmation-div>p {
-
   font-size: 10px;
   color: #FF0099;
 }
@@ -438,7 +430,7 @@ source {
   z-index: 12;
 }
 
-.confirmation-overlay > div {
+.confirmation-overlay>div {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -447,7 +439,7 @@ source {
   border-radius: 10px;
 }
 
-.confirmation-overlay > div > button {
+.confirmation-overlay>div>button {
   padding: 5px 10px;
   cursor: pointer;
   border: none;
@@ -456,6 +448,6 @@ source {
   border-radius: 5px;
 }
 
-.confirmation-overlay > div > button:hover {
+.confirmation-overlay>div>button:hover {
   background-color: #FF53BA;
 }
