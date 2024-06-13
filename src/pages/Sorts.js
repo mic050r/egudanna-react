@@ -6,36 +6,36 @@ import SideBar from '../components/sorts/SideBar';
 import ConfirmationDialog from '../components/sorts/ConfirmationDialog';
 import CommentSection from '../components/sorts/CommentSection';
 import '../css/sorts.css';
-
 const barData = [
     {
         id: 1,
-        name: 'Jane Smith',
+        nickname: 'Jane Smith',
         title: '제목입니다',
-        video: '/videos/example.mp4',
-        songs: ['노래1', '노래2'],
-        likes: 0,
+        videoUrl: '/videos/example.mp4',
+        hashtags: '#노래1 #노래2',
+        likeNum: 0,
         comments: [],
     },
     {
         id: 2,
-        name: 'Jane Smith',
+        nickname: 'Jane Smith',
         title: '제목입니다',
-        video: '/videos/example.mp4',
-        songs: ['노래1', '노래4'],
-        likes: 5,
+        videoUrl: '/videos/example.mp4',
+        hashtags: '#노래1 #노래4',
+        likeNum: 5,
         comments: [],
     },
     {
         id: 3,
-        name: 'Jane Smith',
+        nickname: 'Jane Smith',
         title: '제목입니다',
-        video: '/videos/example.mp4',
-        songs: ['노래1', '노래2', '노래3', '노래4'],
-        likes: 1,
+        videoUrl: '/videos/example.mp4',
+        hashtags: '#노래1 #노래2 #노래3 #노래4',
+        likeNum: 1,
         comments: [],
     },
 ];
+
 
 const App = () => {
     const [hoveredBar, setHoveredBar] = useState(null);
@@ -109,7 +109,7 @@ const App = () => {
     const incrementHeartCount = () => {
         setHeartCount(heartCount + 1);
         setLiked(true);
-        barData[currentIndex].likes += 1;
+        barData[currentIndex].likeNum += 1;
     };
 
     // 댓글 입력 변경 핸들러
@@ -194,7 +194,7 @@ const App = () => {
                     muted
                     disablePictureInPicture
                 >
-                    <source src={barData[currentIndex + 1].video} type="video/mp4" />
+                    <source src={barData[currentIndex + 1].videoUrl} type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
             )}
