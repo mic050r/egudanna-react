@@ -18,6 +18,12 @@ const PublishForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!videoUrl) {
+      console.error("Video URL is not set.");
+      return;
+    }
+
     const data = {
       videoUrl,
       levelId: difficulty,
@@ -28,6 +34,7 @@ const PublishForm = ({
       email,
       password,
     };
+
     onPublish(data);
   };
 

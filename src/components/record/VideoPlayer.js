@@ -89,8 +89,8 @@ const VideoPlayer = () => {
             }
           );
 
-          const uploadedUrl = response.data;
-          setUploadUrl(uploadedUrl);
+          const uploadedUrl = response.data; // Make sure this is the correct path to the URL
+          setUploadUrl(uploadedUrl); // Set the URL after successful upload
         } catch (error) {
           console.error("Error uploading video: ", error);
         }
@@ -183,6 +183,7 @@ const VideoPlayer = () => {
           onPublish={handlePublish}
           challenge_name={challenge_name}
           difficulty={difficulty}
+          videoUrl={uploadUrl} // Pass the uploadUrl as videoUrl
         />
       </Modal>
     </div>
