@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FiX } from "react-icons/fi"; // react-icons에서 x 아이콘을 import
 import "../../css/record/tag.css";
 
 function TagInput({ tags, setTags }) {
@@ -40,7 +41,7 @@ function TagInput({ tags, setTags }) {
               className="deleteButton"
               onClick={() => handleTagDelete(index)}
             >
-              {/* TODO : X 아이콘 추가하기 */}x
+              <FiX /> {/* react-icons의 FiX 아이콘 사용 */}
             </span>
           </div>
         ))}
