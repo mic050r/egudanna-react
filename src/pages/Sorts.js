@@ -84,7 +84,7 @@ const App = () => {
                 setLiked(false);
                 setShowConfirmation(false);
             }
-        }, 50);
+        }, 200);
 
         window.addEventListener('wheel', handleWheel);
 
