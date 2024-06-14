@@ -20,6 +20,6 @@ const SideBar = ({ videoData }) => (
             </ul>
         </div>
     </div>
-);F
+);
 
 export default SideBar;
