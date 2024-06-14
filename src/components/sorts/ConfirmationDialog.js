@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-// 확인 대화상자 컴포넌트
-const ConfirmationDialog = ({ showConfirmation, handleTrashClick }) => {
+const ConfirmationDialog = ({ showConfirmation, handleTrashClick, handleDeleteVideo }) => {
     const [password, setPassword] = useState('');
     const [showOverlay, setShowOverlay] = useState(false);
 
@@ -14,9 +13,7 @@ const ConfirmationDialog = ({ showConfirmation, handleTrashClick }) => {
     };
 
     const handleOverlayConfirmClick = () => {
-        // 비번 확인 
-        handleTrashClick(false);  // handleTrashClick 함수에 비밀번호 전달
-        setShowOverlay(false);       // Overlay를 닫습니다.
+        handleDeleteVideo(password);
     };
 
     const handleOverlayCancelClick = () => {
