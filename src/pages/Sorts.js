@@ -8,39 +8,6 @@ import ConfirmationDialog from '../components/sorts/ConfirmationDialog';
 import CommentSection from '../components/sorts/CommentSection';
 import '../css/sorts.css';
 
-const initialBarData = [
-    {
-        id: 1,
-        nickname: 'Jane Smith',
-        title: '제목입니다',
-        videoUrl: '/videos/example.mp4',
-        hashtags: '#노래1#노래2',
-        password: "000haeun1111",
-        likeNum: 0,
-        comments: [],
-    },
-    {
-        id: 2,
-        nickname: 'Jane Smith',
-        title: '제목입니다',
-        videoUrl: '/videos/example.mp4',
-        hashtags: '#노래1#노래4',
-        password: "000haeun1111",
-        likeNum: 5,
-        comments: [],
-    },
-    {
-        id: 3,
-        nickname: 'Jane Smith',
-        title: '제목입니다',
-        videoUrl: '/videos/example.mp4',
-        hashtags: '#노래1#노래2#노래3#노래4',
-        password: "000haeun1111",
-        likeNum: 1,
-        comments: [],
-    },
-];
-
 const App = () => {
     const [hoveredBar, setHoveredBar] = useState(null);
     const [commentOpen, setCommentOpen] = useState(false);
@@ -52,8 +19,7 @@ const App = () => {
     const [isRecording, setIsRecording] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [challenges, setChallenges] = useState([]);
-    const [barData, setBarData] = useState(initialBarData);
+    const [challenges, setChallenges] = useState();
 
     useEffect(() => {
         getChallenges();
@@ -62,8 +28,11 @@ const App = () => {
     const getChallenges = async () => {
         try {
             let response = await axios.get(`${process.env.REACT_APP_HOST}/api/challenges`);
+            let commentResponse = await axios.get(`${process.env.REACT_APP_HOST}/api/comments${response.data[currentIndex]?.id}`);
             console.log(response.data);
+            console.log(commentResponse.data);
             setChallenges(response.data);
+            setComments(commentResponse.data);
         } catch (err) {
             console.error(err);
         }
@@ -74,7 +43,7 @@ const App = () => {
                 // Calculate scroll direction based on deltaY
                 if (event.deltaY > 0) {
                     // Scroll down
-                    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, barData.length - 1));
+                    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, challenges.length - 1));
                 } else {
                     // Scroll up
                     setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
@@ -91,7 +60,7 @@ const App = () => {
         return () => {
             window.removeEventListener('wheel', handleWheel);
         };
-    }, [commentOpen, barData.length]);
+    }, [commentOpen, challenges.length]);
 
 
     const toggleCommentSection = () => {
@@ -100,7 +69,7 @@ const App = () => {
 
     const incrementHeartCount = () => {
         setLiked(true);
-        setBarData((prevBarData) =>
+        setChallenges((prevBarData) =>
             prevBarData.map((item, index) =>
                 index === currentIndex ? { ...item, likeNum: item.likeNum + 1 } : item
             )
@@ -122,7 +91,7 @@ const App = () => {
             setComments(newComments);
             setNewComment('');
             setNickname('');
-            setBarData((prevBarData) =>
+            setChallenges((prevBarData) =>
                 prevBarData.map((item, index) =>
                     index === currentIndex ? { ...item, comments: [...item.comments, { nickname, text: newComment }] } : item
                 )
@@ -139,7 +108,7 @@ const App = () => {
     };
 
     const handleDeleteVideo = () => {
-        setBarData((prevBarData) => {
+        setChallenges((prevBarData) => {
             const newBarData = prevBarData.filter((_, index) => index !== currentIndex);
             setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
             return newBarData;
@@ -153,16 +122,16 @@ const App = () => {
         <div className="container">
             <SearchBar />
             <div className="image-wrapper">
-                {barData.length > 0 ? (
-                    <div key={barData[currentIndex].id}>
+                {challenges.length > 0 ? (
+                    <div key={challenges[currentIndex].id}>
                         <VideoPlayer
-                            videoData={barData[currentIndex]}
+                            videoData={challenges[currentIndex]}
                             onTrashClick={handleTrashClick}
                             incrementHeartCount={incrementHeartCount}
                             toggleCommentSection={toggleCommentSection}
                             liked={liked}
                         />
-                        <SideBar videoData={barData[currentIndex]} />
+                        <SideBar videoData={challenges[currentIndex]} />
                     </div>
                 ) : (
                     <div className="no-video-message">
@@ -178,7 +147,7 @@ const App = () => {
             <CommentSection
                 commentOpen={commentOpen}
                 toggleCommentSection={toggleCommentSection}
-                comments={barData[currentIndex]?.comments || []}
+                comments={challenges[currentIndex]?.comments || []}
                 handleCommentSubmit={handleCommentSubmit}
                 newComment={newComment}
                 handleCommentChange={handleCommentChange}
@@ -193,15 +162,15 @@ const App = () => {
                     <button className="start-recording" onClick={() => window.location.href = '/screen'}>촬영 시작하기</button>
                 )}
             </div>
-            {currentIndex < barData.length - 1 && (
+            {currentIndex < challenges.length - 1 && (
                 <video
                     className="next-image-wrapper"
-                    autoPlay={hoveredBar === barData[currentIndex + 1].id}
+                    autoPlay={hoveredBar === challenges[currentIndex + 1].id}
                     loop
                     muted
                     disablePictureInPicture
                 >
-                    <source src={barData[currentIndex + 1].videoUrl} type="video/mp4" />
+                    <source src={challenges[currentIndex + 1].videoUrl} type="video/mp4" />
                 </video>
             )}
         </div>
