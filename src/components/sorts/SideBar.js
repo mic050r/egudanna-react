@@ -12,8 +12,8 @@ const SideBar = ({ videoData }) => (
             <img src={musicIcon} className='item-icon' />
             <ul className="song-list">
                 {
-                    videoData.hashtags ? (
-                        videoData.hashtags.split(/(?=#)/).map((tag, index) => (
+                    videoData.hashtag ? (
+                        videoData.hashtag.split(/(?=#)/).map((tag, index) => (
                             <li key={index}>{tag}</li>
                         ))
                     ) : (

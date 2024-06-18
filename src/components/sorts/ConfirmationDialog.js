@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ConfirmationDialog = ({ showConfirmation, handleTrashClick, handleDeleteVideo }) => {
+const ConfirmationDialog = ({ videoId, showConfirmation, handleDeleteVideo }) => {
     const [password, setPassword] = useState('');
     const [showOverlay, setShowOverlay] = useState(false);
 
@@ -13,7 +13,11 @@ const ConfirmationDialog = ({ showConfirmation, handleTrashClick, handleDeleteVi
     };
 
     const handleOverlayConfirmClick = () => {
-        handleDeleteVideo(password);
+        // Call the API to delete the video
+        handleDeleteVideo(videoId, password);
+        // Reset states and close overlay after deletion
+        setPassword('');
+        setShowOverlay(false);
     };
 
     const handleOverlayCancelClick = () => {

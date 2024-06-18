@@ -11,7 +11,6 @@ import '../css/sorts.css';
 const App = () => {
     const [hoveredBar, setHoveredBar] = useState(null);
     const [commentOpen, setCommentOpen] = useState(false);
-    const [heartCount, setHeartCount] = useState(0);
     const [liked, setLiked] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
@@ -26,12 +25,11 @@ const App = () => {
         getChallenges();
     }, []);
 
-    // Fetch challenges data from the API
     const getChallenges = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_HOST}/api/challenges`);
-            setBarData(response.data); // Set the fetched data to barData
-            setChallenges(response.data); // Optionally set challenges data if needed
+            setBarData(response.data);
+            setChallenges(response.data);
         } catch (err) {
             console.error('Error fetching challenges:', err);
         }
@@ -82,13 +80,13 @@ const App = () => {
     const handleCommentSubmit = (e) => {
         e.preventDefault();
         if (newComment.trim() !== '' && nickname.trim() !== '') {
-            const newComments = [...comments, { nickname, text: newComment }];
+            const newComments = [...comments, { nickname, comment: newComment }];
             setComments(newComments);
             setNewComment('');
             setNickname('');
             setBarData((prevBarData) =>
                 prevBarData.map((item, index) =>
-                    index === currentIndex ? { ...item, comments: [...item.comments, { nickname, text: newComment }] } : item
+                    index === currentIndex ? { ...item, comments: [...item.comments, { nickname, comment: newComment }] } : item
                 )
             );
         }
@@ -102,16 +100,28 @@ const App = () => {
         setShowConfirmation(!showConfirmation);
     };
 
-    const handleDeleteVideo = () => {
-        setBarData((prevBarData) => {
-            const newBarData = prevBarData.filter((_, index) => index !== currentIndex);
-            setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
-            return newBarData;
-        });
-        setShowConfirmation(false);
-        setCommentOpen(false);
-        setLiked(false);
+    const handleDeleteVideo = async (videoId, password) => {
+        try {
+            const videoId = barData[currentIndex].id;
+            console.log('Deleting video with ID:', videoId); // 추가 로그
+    
+            const response = await axios.delete(`${process.env.REACT_APP_HOST}/api/challenges/${videoId}`, {
+                data: {
+                    password: password
+                }
+            });
+            console.log('Delete response:', response); // 추가 로그
+    
+            setBarData((prevBarData) => prevBarData.filter((_, index) => index !== currentIndex));
+            setShowConfirmation(false);
+            setCommentOpen(false);
+            setLiked(false);
+            setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+        } catch (err) {
+            console.error('Error deleting video:', err);
+        }
     };
+    
 
     return (
         <div className="container">

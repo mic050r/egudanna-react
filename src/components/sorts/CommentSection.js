@@ -6,10 +6,10 @@ const CommentSection = ({ commentOpen, toggleCommentSection, comments, handleCom
         <div className="comment-section">
             <button onClick={toggleCommentSection}>X</button>
             <div>
-                {comments.map((comment, index) => (
+                {comments.map((commentDiv, index) => (
                     <div key={index}className='input-things'>
-                        <p>{comment.nickname}</p>
-                        <p>{comment.text}</p>
+                        <p>{commentDiv.nickname}</p>
+                        <p>{commentDiv.comment}</p>
                     </div>
                 ))}
             </div>
