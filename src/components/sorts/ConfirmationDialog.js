@@ -10,7 +10,7 @@ const ConfirmationDialog = ({ videoId, showConfirmation, handleDeleteVideo }) =>
 
     const handleConfirmClick = () => {
         setShowOverlay(true);
-    };
+    }; 
 
     const handleOverlayConfirmClick = () => {
         // Call the API to delete the video

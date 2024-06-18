@@ -10,7 +10,7 @@ const SideBar = ({ videoData }) => (
         <div className="sidebar-item">{videoData.title}</div>
         <div className="sidebar-item">
             <img src={musicIcon} className='item-icon' />
-            <ul className="song-list">
+            <ul className="song-list"> 
                 {
                     videoData.hashtag ? (
                         videoData.hashtag.split(/(?=#)/).map((tag, index) => (
@@ -18,7 +18,7 @@ const SideBar = ({ videoData }) => (
                         ))
                     ) : (
                         <li>No hashtags available</li>
-                    )
+                    ) 
                 }
             </ul>
         </div>
