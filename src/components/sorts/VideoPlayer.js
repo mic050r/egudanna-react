@@ -1,13 +1,21 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import trashIcon from '../../img/sorts/trash.svg';
 import likeIcon from '../../img/sorts/likes.svg';
 import likeOnIcon from '../../img/sorts/likes-on.svg';
 import commentIcon from '../../img/sorts/comment.svg';
 import { FaPlay, FaPause } from "react-icons/fa";
 
-const VideoPlayer = ({ videoData, onTrashClick, incrementHeartCount, toggleCommentSection, liked }) => {
+const VideoPlayer = ({ videoData, onTrashClick, incrementHeartCount, toggleCommentSection, liked, comments }) => {
     const videoRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [countC, setCountC] = useState(0); // State to track comment count
+
+    // useEffect to update comment count
+    useEffect(() => {
+        if (comments) {
+            setCountC(comments.length);
+        }
+    }, [comments]);
 
     const handlePlayVideo = () => {
         if (videoRef.current) {
@@ -49,7 +57,7 @@ const VideoPlayer = ({ videoData, onTrashClick, incrementHeartCount, toggleComme
                     <button className="button" onClick={toggleCommentSection}>
                         <img src={commentIcon} alt="Comment" className="icon" />
                     </button>
-                    <span className="comment-count">{videoData.comments.length}</span>
+                    <span className="comment-count">{countC}</span>
                 </div>
             </div>
             <button className="play-video-button" onClick={handlePlayVideo}>

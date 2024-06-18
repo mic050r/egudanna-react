@@ -11,44 +11,42 @@ import '../css/sorts.css';
 const App = () => {
     const [hoveredBar, setHoveredBar] = useState(null);
     const [commentOpen, setCommentOpen] = useState(false);
-    const [heartCount, setHeartCount] = useState(0);
     const [liked, setLiked] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [nickname, setNickname] = useState('');
     const [isRecording, setIsRecording] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [challenges, setChallenges] = useState();
-
+    const [currentIndex, setCurrentIndex] = useState(1);
+    const [barData, setBarData] = useState([]);
+  
     useEffect(() => {
         getChallenges();
-    }, []);
+    }, [currentIndex]);
+
+    useEffect(() => {
+        if(barData.length > 0) {
+            getComments()
+        }
+    }, [barData])
 
     const getChallenges = async () => {
         try {
-            let response = await axios.get(`${process.env.REACT_APP_HOST}/api/challenges`);
-            let commentResponse = await axios.get(`${process.env.REACT_APP_HOST}/api/comments${response.data[currentIndex]?.id}`);
-            console.log(response.data);
-            console.log(commentResponse.data);
-            setChallenges(response.data);
-            setComments(commentResponse.data);
+            const response = await axios.get(`${process.env.REACT_APP_HOST}/api/challenges`);
+            setBarData(response.data);
         } catch (err) {
-            console.error(err);
+            console.error('Error fetching challenges:', err);
         }
     };
     useEffect(() => {
         const handleWheel = debounce((event) => {
             if (!commentOpen) {
-                // Calculate scroll direction based on deltaY
                 if (event.deltaY > 0) {
-                    // Scroll down
-                    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, challenges.length - 1));
+                    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, barData.length - 1));
                 } else {
-                    // Scroll up
-                    setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+                    setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 1));
                 }
-                // Reset states
+                // getComments()
                 setCommentOpen(false);
                 setLiked(false);
                 setShowConfirmation(false);
@@ -62,11 +60,20 @@ const App = () => {
         };
     }, [commentOpen, challenges.length]);
 
-
     const toggleCommentSection = () => {
         setCommentOpen(!commentOpen);
     };
 
+    const getComments = async () => {
+        try {
+            // debugger
+            const numberC = (barData[currentIndex].id);
+            const com = await axios.get(`${process.env.REACT_APP_HOST}/api/comments/${numberC}`);
+            setComments(com.data);
+        } catch (err) {
+            console.error('Error fetching challenges:', err);
+        }
+    };
     const incrementHeartCount = () => {
         setLiked(true);
         setChallenges((prevBarData) =>
@@ -84,20 +91,41 @@ const App = () => {
         setNickname(e.target.value);
     };
 
-    const handleCommentSubmit = (e) => {
-        e.preventDefault();
-        if (newComment.trim() !== '' && nickname.trim() !== '') {
-            const newComments = [...comments, { nickname, text: newComment }];
-            setComments(newComments);
+    const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    if (newComment.trim() !== '' && nickname.trim() !== '') {
+        try {
+            const payload = {
+                challenge_id: barData[currentIndex].id,
+                nickname: nickname,
+                comment: newComment,
+            };
+            console.log('Submitting comment:', payload);
+        
+            const response = await axios.post(`${process.env.REACT_APP_HOST}/api/comments`, {
+                challengeId: payload.challenge_id, 
+                nickname: payload.nickname, 
+                comment: payload.comment
+            }, {
+            });
+        
+            console.log('Response from server:', response.data);
+        
+            const updatedComments = [...comments, response.data];
+            setComments(updatedComments);
             setNewComment('');
             setNickname('');
             setChallenges((prevBarData) =>
                 prevBarData.map((item, index) =>
-                    index === currentIndex ? { ...item, comments: [...item.comments, { nickname, text: newComment }] } : item
+                    index === currentIndex ? { ...item, comments: updatedComments } : item
                 )
             );
+        } catch (err) {
+            console.error('Error adding comment:', err);
         }
-    };
+        
+    }
+};
 
     const handleStartRecording = () => {
         setIsRecording(true);
@@ -118,6 +146,7 @@ const App = () => {
         setLiked(false);
     };
 
+
     return (
         <div className="container">
             <SearchBar />
@@ -130,6 +159,7 @@ const App = () => {
                             incrementHeartCount={incrementHeartCount}
                             toggleCommentSection={toggleCommentSection}
                             liked={liked}
+                            comments={comments}
                         />
                         <SideBar videoData={challenges[currentIndex]} />
                     </div>
@@ -147,13 +177,16 @@ const App = () => {
             <CommentSection
                 commentOpen={commentOpen}
                 toggleCommentSection={toggleCommentSection}
-                comments={challenges[currentIndex]?.comments || []}
+                comments={comments || []}
                 handleCommentSubmit={handleCommentSubmit}
                 newComment={newComment}
                 handleCommentChange={handleCommentChange}
                 nickname={nickname}
                 handleNicknameChange={handleNicknameChange}
+                currentIndex={currentIndex}
+                barData={barData}
             />
+
             <div className="bottom-left-buttons">
                 <button className="button">?</button>
                 {!isRecording ? (

@@ -12,11 +12,14 @@ const SideBar = ({ videoData }) => (
             <img src={musicIcon} className='item-icon' />
             <ul className="song-list">
                 {
-                    videoData.hashtags.split(/(?=#)/).map((tag, index) => (
-                        <li key={index}>{tag}</li>
-                    ))}
-
-
+                    videoData.hashtag ? (
+                        videoData.hashtag.split(/(?=#)/).map((tag, index) => (
+                            <li key={index}>{tag}</li>
+                        ))
+                    ) : (
+                        <li>No hashtags available</li>
+                    )
+                }
             </ul>
         </div>
     </div>
