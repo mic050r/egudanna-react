@@ -49,7 +49,8 @@ const VideoPlayer = ({ videoData, onTrashClick, incrementHeartCount, toggleComme
                     <button className="button" onClick={toggleCommentSection}>
                         <img src={commentIcon} alt="Comment" className="icon" />
                     </button>
-                    <span className="comment-count">{videoData.comments.length}</span>
+                    {/* Ensure videoData.comments is defined before accessing its length */}
+                    <span className="comment-count">{videoData.comments && videoData.comments.length}</span>
                 </div>
             </div>
             <button className="play-video-button" onClick={handlePlayVideo}>

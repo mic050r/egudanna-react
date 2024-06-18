@@ -8,39 +8,6 @@ import ConfirmationDialog from '../components/sorts/ConfirmationDialog';
 import CommentSection from '../components/sorts/CommentSection';
 import '../css/sorts.css';
 
-const initialBarData = [
-    {
-        id: 1,
-        nickname: 'Jane Smith',
-        title: '제목입니다',
-        videoUrl: '/videos/example.mp4',
-        hashtags: '#노래1#노래2',
-        password: "000haeun1111",
-        likeNum: 0,
-        comments: [],
-    },
-    {
-        id: 2,
-        nickname: 'Jane Smith',
-        title: '제목입니다',
-        videoUrl: '/videos/example.mp4',
-        hashtags: '#노래1#노래4',
-        password: "000haeun1111",
-        likeNum: 5,
-        comments: [],
-    },
-    {
-        id: 3,
-        nickname: 'Jane Smith',
-        title: '제목입니다',
-        videoUrl: '/videos/example.mp4',
-        hashtags: '#노래1#노래2#노래3#노래4',
-        password: "000haeun1111",
-        likeNum: 1,
-        comments: [],
-    },
-];
-
 const App = () => {
     const [hoveredBar, setHoveredBar] = useState(null);
     const [commentOpen, setCommentOpen] = useState(false);
@@ -51,35 +18,33 @@ const App = () => {
     const [nickname, setNickname] = useState('');
     const [isRecording, setIsRecording] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentIndex, setCurrentIndex] = useState(1);
     const [challenges, setChallenges] = useState([]);
-    const [barData, setBarData] = useState(initialBarData);
+    const [barData, setBarData] = useState([]);
 
     useEffect(() => {
         getChallenges();
     }, []);
 
+    // Fetch challenges data from the API
     const getChallenges = async () => {
         try {
-            let response = await axios.get(`${process.env.REACT_APP_HOST}/api/challenges`);
-            console.log(response.data);
-            setChallenges(response.data);
+            const response = await axios.get(`${process.env.REACT_APP_HOST}/api/challenges`);
+            setBarData(response.data); // Set the fetched data to barData
+            setChallenges(response.data); // Optionally set challenges data if needed
         } catch (err) {
-            console.error(err);
+            console.error('Error fetching challenges:', err);
         }
     };
+
     useEffect(() => {
         const handleWheel = debounce((event) => {
             if (!commentOpen) {
-                // Calculate scroll direction based on deltaY
                 if (event.deltaY > 0) {
-                    // Scroll down
                     setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, barData.length - 1));
                 } else {
-                    // Scroll up
-                    setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+                    setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 1));
                 }
-                // Reset states
                 setCommentOpen(false);
                 setLiked(false);
                 setShowConfirmation(false);
@@ -92,7 +57,6 @@ const App = () => {
             window.removeEventListener('wheel', handleWheel);
         };
     }, [commentOpen, barData.length]);
-
 
     const toggleCommentSection = () => {
         setCommentOpen(!commentOpen);
