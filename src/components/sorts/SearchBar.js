@@ -8,5 +8,5 @@ const SearchBar = () => (
         <button className="search-button"><FiSearch /></button>
     </div>
 );
-
+ 
 export default SearchBar;

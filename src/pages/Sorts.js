@@ -19,7 +19,7 @@ const App = () => {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(1);
     const [barData, setBarData] = useState([]);
-  
+
     useEffect(() => {
         getChallenges();
     }, [currentIndex]);
@@ -34,6 +34,7 @@ const App = () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_HOST}/api/challenges`);
             setBarData(response.data);
+            
         } catch (err) {
             console.error('Error fetching challenges:', err);
         }
@@ -58,7 +59,7 @@ const App = () => {
         return () => {
             window.removeEventListener('wheel', handleWheel);
         };
-    }, [commentOpen, challenges.length]);
+    }, [commentOpen, barData.length]);
 
     const toggleCommentSection = () => {
         setCommentOpen(!commentOpen);
@@ -76,7 +77,7 @@ const App = () => {
     };
     const incrementHeartCount = () => {
         setLiked(true);
-        setChallenges((prevBarData) =>
+        setBarData((prevBarData) =>
             prevBarData.map((item, index) =>
                 index === currentIndex ? { ...item, likeNum: item.likeNum + 1 } : item
             )
@@ -115,7 +116,7 @@ const App = () => {
             setComments(updatedComments);
             setNewComment('');
             setNickname('');
-            setChallenges((prevBarData) =>
+            setBarData((prevBarData) =>
                 prevBarData.map((item, index) =>
                     index === currentIndex ? { ...item, comments: updatedComments } : item
                 )
@@ -135,15 +136,26 @@ const App = () => {
         setShowConfirmation(!showConfirmation);
     };
 
-    const handleDeleteVideo = () => {
-        setChallenges((prevBarData) => {
-            const newBarData = prevBarData.filter((_, index) => index !== currentIndex);
-            setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
-            return newBarData;
-        });
-        setShowConfirmation(false);
-        setCommentOpen(false);
-        setLiked(false);
+    const handleDeleteVideo = async (videoId, password) => {
+        try {
+            const videoId = barData[currentIndex].id;
+            console.log('Deleting video with ID:', videoId); // 추가 로그
+
+            const response = await axios.delete(`${process.env.REACT_APP_HOST}/api/challenges/${videoId}`, {
+                data: {
+                    password: password
+                }
+            });
+            console.log('Delete response:', response); // 추가 로그
+
+            setBarData((prevBarData) => prevBarData.filter((_, index) => index !== currentIndex));
+            setShowConfirmation(false);
+            setCommentOpen(false);
+            setLiked(false);
+            setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+        } catch (err) {
+            console.error('Error deleting video:', err);
+        }
     };
 
 
@@ -151,17 +163,17 @@ const App = () => {
         <div className="container">
             <SearchBar />
             <div className="image-wrapper">
-                {challenges.length > 0 ? (
-                    <div key={challenges[currentIndex].id}>
+                {barData.length > 0 ? (
+                    <div key={barData[currentIndex].id}>
                         <VideoPlayer
-                            videoData={challenges[currentIndex]}
+                            videoData={barData[currentIndex]}
                             onTrashClick={handleTrashClick}
                             incrementHeartCount={incrementHeartCount}
                             toggleCommentSection={toggleCommentSection}
                             liked={liked}
                             comments={comments}
                         />
-                        <SideBar videoData={challenges[currentIndex]} />
+                        <SideBar videoData={barData[currentIndex]} />
                     </div>
                 ) : (
                     <div className="no-video-message">
@@ -195,15 +207,15 @@ const App = () => {
                     <button className="start-recording" onClick={() => window.location.href = '/screen'}>촬영 시작하기</button>
                 )}
             </div>
-            {currentIndex < challenges.length - 1 && (
+            {currentIndex < barData.length - 1 && (
                 <video
                     className="next-image-wrapper"
-                    autoPlay={hoveredBar === challenges[currentIndex + 1].id}
+                    autoPlay={hoveredBar === barData[currentIndex + 1].id}
                     loop
                     muted
                     disablePictureInPicture
                 >
-                    <source src={challenges[currentIndex + 1].videoUrl} type="video/mp4" />
+                    <source src={barData[currentIndex + 1].videoUrl} type="video/mp4" />
                 </video>
             )}
         </div>

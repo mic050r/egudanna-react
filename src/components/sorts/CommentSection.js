@@ -11,7 +11,7 @@ const CommentSection = ({ commentOpen, toggleCommentSection, comments, setCommen
                     <div key={index} className='input-things'>
                         <p>{commentDiv.nickname}</p>
                         <p>{commentDiv.comment}</p>
-                    </div>
+                    </div> 
                 ))}
             </div>
             <form className="comment-input" onSubmit={handleCommentSubmit}>

@@ -8,12 +8,11 @@ import { FaPlay, FaPause } from "react-icons/fa";
 const VideoPlayer = ({ videoData, onTrashClick, incrementHeartCount, toggleCommentSection, liked, comments }) => {
     const videoRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [countC, setCountC] = useState(0); // State to track comment count
+    const [countC, setCountC] = useState(0);
 
-    // useEffect to update comment count
     useEffect(() => {
         if (comments) {
-            setCountC(comments.length);
+            setCountC(comments.length); 
         }
     }, [comments]);
 
