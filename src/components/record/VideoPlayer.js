@@ -133,6 +133,23 @@ const VideoPlayer = () => {
       await axios.post("http://localhost:7000/api/challenges", publishData);
       console.log("Published data:", publishData);
       alert("영상이 발송되었습니다!");
+
+      // 이메일 form 데이터 형식으로 보내기
+      const emailData = new FormData();
+      emailData.append("to", data.email);
+      emailData.append(
+        "subject",
+        `${data.nickname}님의 ${data.title} 챌린지 영상입니다!`
+      );
+      emailData.append("body", `${data.videoUrl}`);
+
+      await axios.post("http://localhost:7000/api/mails/send", emailData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Email sent successfully!");
+
       navigate("/sorts");
     } catch (error) {
       console.error("Error publishing data: ", error);
