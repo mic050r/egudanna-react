@@ -16,6 +16,16 @@
   object-fit: fill;
 }
 
+.video-container,
+.cam-container {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: auto;
+  position: relative; /* 추가: 위치 상대적으로 설정 */
+}
+
 .circle-button {
   width: 50px;
   height: 50px;
@@ -43,4 +53,16 @@
   font-size: 150px;
   font-weight: bold;
   color: #fff;
+}
+
+.range-image-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.range-image {
+  width: 700px; /* 이미지 너비 설정 */
+  height: auto; /* 높이 자동 설정 */
 }

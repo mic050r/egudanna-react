@@ -3,11 +3,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
 import RecordRTC from "recordrtc";
 import axios from "axios";
-import "../../css/record/video.css";
+import "../../css/record/video.css"; // css import
+
 import CircleButton from "./CircleButton";
 import Timer from "./Timer";
 import Modal from "./Modal";
 import PublishForm from "../submit/PublishForm"; // 발행 폼 컴포넌트 import
+import rangeImage from "../../img/range.png"; // range.png 이미지 import
 
 const VideoPlayer = () => {
   const location = useLocation();
@@ -133,6 +135,23 @@ const VideoPlayer = () => {
       await axios.post("http://localhost:7000/api/challenges", publishData);
       console.log("Published data:", publishData);
       alert("영상이 발송되었습니다!");
+
+      // 이메일 form 데이터 형식으로 보내기
+      const emailData = new FormData();
+      emailData.append("to", data.email);
+      emailData.append(
+        "subject",
+        `${data.nickname}님의 ${data.title} 챌린지 영상입니다!`
+      );
+      emailData.append("body", `${data.videoUrl}`);
+
+      await axios.post("http://localhost:7000/api/mails/send", emailData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Email sent successfully!");
+
       navigate("/sorts");
     } catch (error) {
       console.error("Error publishing data: ", error);
@@ -172,6 +191,9 @@ const VideoPlayer = () => {
           screenshotFormat="image/jpeg"
           className="webcam-frame"
         />
+        <div className="range-image-container">
+          <img src={rangeImage} alt="Range" className="range-image" />
+        </div>
       </div>
       <CircleButton onClick={handleButtonClick} />
       {isTimerActive && <Timer initialTime={3} onFinish={handleTimerFinish} />}
