@@ -6,7 +6,7 @@ import VideoPlayer from '../components/sorts/VideoPlayer';
 import SideBar from '../components/sorts/SideBar';
 import ConfirmationDialog from '../components/sorts/ConfirmationDialog';
 import CommentSection from '../components/sorts/CommentSection';
-import PopupInquiry from '../components/sorts/PopupInquiry.js';
+import PopupInquiry from '../components/sorts/PopupInquiry';
 import '../css/sorts.css';
 
 const App = () => {
@@ -20,7 +20,8 @@ const App = () => {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(1);
     const [barData, setBarData] = useState([]);
-    const [isPopupVisible, setIsPopupVisible] = useState(false); // State for popup visibility
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
         getChallenges();
@@ -44,11 +45,12 @@ const App = () => {
     useEffect(() => {
         const handleWheel = debounce((event) => {
             if (!commentOpen) {
-                if (event.deltaY > 0) {
-                    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, barData.length - 1));
-                } else {
-                    setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 1));
-                }
+                setCurrentIndex((prevIndex) => {
+                    let newIndex = event.deltaY > 0 ? prevIndex + 1 : prevIndex - 1;
+                    newIndex = Math.max(newIndex, 0); // Prevent negative index
+                    newIndex = Math.min(newIndex, barData.length - 1); // Prevent overflow index
+                    return newIndex;
+                });
                 setCommentOpen(false);
                 setLiked(false);
                 setShowConfirmation(false);
@@ -68,11 +70,11 @@ const App = () => {
 
     const getComments = async () => {
         try {
-            const numberC = barData[currentIndex].id;
+            const numberC = barData[currentIndex]?.id;
             const com = await axios.get(`${process.env.REACT_APP_HOST}/api/comments/${numberC}`);
             setComments(com.data);
         } catch (err) {
-            console.error('Error fetching challenges:', err);
+            console.error('Error fetching comments:', err);
         }
     };
 
@@ -103,11 +105,7 @@ const App = () => {
                     comment: newComment,
                 };
 
-                const response = await axios.post(`${process.env.REACT_APP_HOST}/api/comments`, {
-                    challengeId: payload.challenge_id,
-                    nickname: payload.nickname,
-                    comment: payload.comment,
-                });
+                const response = await axios.post(`${process.env.REACT_APP_HOST}/api/comments`, payload);
 
                 const updatedComments = [...comments, response.data];
                 setComments(updatedComments);
@@ -134,8 +132,6 @@ const App = () => {
 
     const handleDeleteVideo = async (videoId, password) => {
         try {
-            const videoId = barData[currentIndex].id;
-
             const response = await axios.delete(`${process.env.REACT_APP_HOST}/api/challenges/${videoId}`, {
                 data: {
                     password: password,
@@ -152,26 +148,27 @@ const App = () => {
         }
     };
 
-    // Toggle popup visibility
     const togglePopup = () => {
         setIsPopupVisible(!isPopupVisible);
     };
 
+    const filteredBarData = barData.filter(video => video.title.includes(searchText));
+
     return (
         <div className="container">
-            <SearchBar />
+            <SearchBar searchText={searchText} setSearchText={setSearchText} />
             <div className="image-wrapper">
-                {barData.length > 0 ? (
-                    <div key={barData[currentIndex].id}>
+                {filteredBarData.length > 0 && filteredBarData[currentIndex] ? (
+                    <div key={filteredBarData[currentIndex].id}>
                         <VideoPlayer
-                            videoData={barData[currentIndex]}
+                            videoData={filteredBarData[currentIndex]}
                             onTrashClick={handleTrashClick}
                             incrementHeartCount={incrementHeartCount}
                             toggleCommentSection={toggleCommentSection}
                             liked={liked}
                             comments={comments}
                         />
-                        <SideBar videoData={barData[currentIndex]} />
+                        <SideBar videoData={filteredBarData[currentIndex]} />
                     </div>
                 ) : (
                     <div className="no-video-message">
@@ -195,9 +192,9 @@ const App = () => {
                 nickname={nickname}
                 handleNicknameChange={handleNicknameChange}
                 currentIndex={currentIndex}
-                barData={barData}
+                barData={filteredBarData}
             />
-            {isPopupVisible && <PopupInquiry setIsPopupVisible={setIsPopupVisible}/>}
+            {isPopupVisible && <PopupInquiry setIsPopupVisible={setIsPopupVisible} />}
             <div className="bottom-left-buttons">
                 <button className="button" onClick={togglePopup}>?</button>
                 {!isRecording ? (
@@ -206,15 +203,15 @@ const App = () => {
                     <button className="start-recording" onClick={() => window.location.href = '/screen'}>촬영 시작하기</button>
                 )}
             </div>
-            {currentIndex < barData.length - 1 && (
+            {currentIndex < filteredBarData.length - 1 && filteredBarData[currentIndex + 1]?.videoUrl && (
                 <video
                     className="next-image-wrapper"
-                    autoPlay={hoveredBar === barData[currentIndex + 1].id}
+                    autoPlay={hoveredBar === filteredBarData[currentIndex + 1].id}
                     loop
                     muted
                     disablePictureInPicture
                 >
-                    <source src={barData[currentIndex + 1].videoUrl} type="video/mp4" />
+                    <source src={filteredBarData[currentIndex + 1].videoUrl} type="video/mp4" />
                 </video>
             )}
         </div>
