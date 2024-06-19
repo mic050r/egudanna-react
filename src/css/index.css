@@ -5,11 +5,8 @@
 
 body,
 html {
-  margin: 0;
-  padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; 
 }
 
 #root {
@@ -18,14 +15,15 @@ html {
 
 .full-screen-image {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-image: url("../img/index/background-index.svg");
   background-size: cover;
   background-position: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 }
 
 .bottom-right-button {
@@ -52,6 +50,11 @@ html {
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+}
+
+.content-bottom-image {
+  top: 30%;
+  height: 90%;
 }
 .content-top-image {
   top: -25vh;
