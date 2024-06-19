@@ -3,11 +3,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
 import RecordRTC from "recordrtc";
 import axios from "axios";
-import "../../css/record/video.css";
+import "../../css/record/video.css"; // css import
+
 import CircleButton from "./CircleButton";
 import Timer from "./Timer";
 import Modal from "./Modal";
 import PublishForm from "../submit/PublishForm"; // 발행 폼 컴포넌트 import
+import rangeImage from "../../img/range.png"; // range.png 이미지 import
 
 const VideoPlayer = () => {
   const location = useLocation();
@@ -189,6 +191,9 @@ const VideoPlayer = () => {
           screenshotFormat="image/jpeg"
           className="webcam-frame"
         />
+        <div className="range-image-container">
+          <img src={rangeImage} alt="Range" className="range-image" />
+        </div>
       </div>
       <CircleButton onClick={handleButtonClick} />
       {isTimerActive && <Timer initialTime={3} onFinish={handleTimerFinish} />}

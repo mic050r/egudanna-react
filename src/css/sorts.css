@@ -15,7 +15,9 @@ body {
   padding: 0;
   font-family: Arial, sans-serif;
 }
-input:focus {outline: none;}
+input:focus {
+  outline: none;
+}
 .container {
   display: flex;
   justify-content: center;
@@ -35,9 +37,9 @@ input:focus {outline: none;}
   height: 100vh;
   font-size: 24px;
   font-weight: bold;
-  color: #FF0099;
+  color: #ff0099;
 }
-.play-video-button{
+.play-video-button {
   position: absolute;
   top: 30px;
   left: 30px;
@@ -97,7 +99,6 @@ input:focus {outline: none;}
   background-color: rgba(255, 255, 255, 0.178);
   backdrop-filter: blur(2px);
   padding: 0px 10px;
-  ;
   height: 16px;
   display: flex;
   text-align: center;
@@ -179,7 +180,7 @@ source {
   width: 300px;
   height: var(--sorts-main-screen-height);
   background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid #FF53BA;
+  border: 1px solid #ff53ba;
   border-radius: 15px;
   box-sizing: border-box;
   display: flex;
@@ -191,7 +192,7 @@ source {
   background-color: white;
 }
 
-.comment-section>div {
+.comment-section > div {
   position: relative;
   padding: 25px;
   padding-right: 35px;
@@ -208,22 +209,22 @@ source {
   box-sizing: border-box;
 }
 
-.comment-section>div::-webkit-scrollbar {
+.comment-section > div::-webkit-scrollbar {
   display: none;
 }
 
-.comment-section>button {
+.comment-section > button {
   position: absolute;
   top: 20px;
   right: 20px;
-  color: #FF53BA;
+  color: #ff53ba;
   background-color: #00000000;
   border: 0;
   z-index: 13;
 }
 
-.comment-section>button:hover {
-  color: #FF0099;
+.comment-section > button:hover {
+  color: #ff0099;
 }
 
 .input-things {
@@ -237,18 +238,18 @@ source {
   gap: 2px;
 }
 
-.input-things>p {
-  width: 100%; 
+.input-things > p {
+  width: 100%;
   overflow-wrap: break-word;
   white-space: pre-wrap;
 }
 
-.input-things>p:nth-child(1) {
+.input-things > p:nth-child(1) {
   color: #868686;
   font-size: 12px;
 }
 
-.input-things>p:nth-child(2) {
+.input-things > p:nth-child(2) {
   color: #000000;
   font-size: 15px;
 }
@@ -263,36 +264,36 @@ source {
   height: 15%;
   width: 100%;
   padding: 15px;
-  border: 1px solid #FF53BA;
+  border: 1px solid #ff53ba;
   border-radius: 15px;
   box-sizing: border-box;
   /* 박스 모델에 border와 padding을 포함시킴 */
 }
 
-.comment-input>p {
+.comment-input > p {
   font-size: 10px;
-  color: #FF53BA;
+  color: #ff53ba;
 }
 
-.comment-input>input,
-.comment-input>*>input {
+.comment-input > input,
+.comment-input > * > input {
   border: 0;
-  border-bottom: 1px solid #FF53BA;
+  border-bottom: 1px solid #ff53ba;
 }
 
-.comment-input>input {
+.comment-input > input {
   width: calc(10px * 14);
 }
 
-.comment-input>*>input {
+.comment-input > * > input {
   width: 75%;
 }
 
-.comment-input>*>button {
+.comment-input > * > button {
   font-size: 11px;
   width: fit-content;
   padding: 2px 8px;
-  background-color: #FF0099;
+  background-color: #ff0099;
   border: 0;
   border-radius: 5px;
   color: white;
@@ -301,8 +302,8 @@ source {
   justify-content: center;
 }
 
-.comment-input>*>button:hover {
-  background-color: #FF53BA;
+.comment-input > * > button:hover {
+  background-color: #ff53ba;
 }
 
 .bottom-left-buttons {
@@ -314,13 +315,13 @@ source {
   gap: 15px;
 }
 
-.bottom-left-buttons>.button {
+.bottom-left-buttons > .button {
   width: 50px;
   height: 50px;
   padding: 2px;
   background-color: rgb(255, 255, 255);
-  box-shadow: #FFDDF1 0 4px 4px 1px;
-  color: #FF53BA;
+  box-shadow: #ffddf1 0 4px 4px 1px;
+  color: #ff53ba;
 }
 
 .start-recording {
@@ -332,7 +333,7 @@ source {
   align-items: center;
   font-size: 15px;
   padding: 15px 20px;
-  background-color: #FF53BA;
+  background-color: #ff53ba;
   color: white;
   box-shadow: none;
 }
@@ -348,7 +349,7 @@ source {
   padding: 10px 20px;
   margin-bottom: 5vh;
   border-radius: 50px;
-  border: #FF53BA 1px solid;
+  border: #ff53ba 1px solid;
   /* 2px magenta border */
 }
 
@@ -365,7 +366,7 @@ source {
   right: 10px;
   border: none;
   /* Remove default border */
-  color: #FF53BA;
+  color: #ff53ba;
   font-size: 20px;
   font-weight: bold;
   padding: 8px 10px;
@@ -373,7 +374,7 @@ source {
 }
 
 .search-button:hover {
-  color: #FF0099;
+  color: #ff0099;
 }
 
 .search-button:focus {
@@ -398,7 +399,7 @@ source {
   color: white;
 }
 
-.trash-button > img{
+.trash-button > img {
   width: 20px;
 }
 
@@ -419,22 +420,22 @@ source {
   gap: 5px;
 }
 
-.confirmation-div>p {
+.confirmation-div > p {
   font-size: 10px;
-  color: #FF53BA;
+  color: #ff53ba;
 }
 
-.confirmation-div>div {
+.confirmation-div > div {
   display: flex;
   flex-direction: row;
   gap: 10px;
 }
 
-.confirmation-div>div>button {
+.confirmation-div > div > button {
   font-size: 11px;
   width: 40px;
   padding: 2px 8px;
-  background-color: #FF0099;
+  background-color: #ff0099;
   border: 0;
   border-radius: 5px;
   color: white;
@@ -444,16 +445,15 @@ source {
   cursor: pointer;
 }
 
-.confirmation-div>div>button:hover{
-  background-color: #FF53BA;
+.confirmation-div > div > button:hover {
+  background-color: #ff53ba;
 }
 
-
-.confirmation-div>div>input {
+.confirmation-div > div > input {
   font-size: 14px;
   width: calc(14px * 26);
   border: 0;
-  border-bottom: 1px solid #FF53BA;
+  border-bottom: 1px solid #ff53ba;
 }
 .confirmation-overlay {
   position: absolute;
@@ -475,12 +475,12 @@ source {
   border-radius: 10px;
 }
 
-.confirmation-overlay  > p{
+.confirmation-overlay > p {
   font-size: 10px;
-  color: #FF53BA;
+  color: #ff53ba;
 }
 
-.confirmation-overlay  > div {
+.confirmation-overlay > div {
   display: flex;
   gap: 10px;
   justify-content: space-around;
@@ -491,11 +491,23 @@ source {
   font-size: 13px;
   cursor: pointer;
   border: none;
-  background-color: #FF0099;
+  background-color: #ff0099;
   color: white;
   border-radius: 5px;
 }
 
 .confirmation-overlay > div > button:hover {
-  background-color: #FF53BA;
+  background-color: hsl(324, 100%, 66%);
+}
+
+.video-player-container {
+  position: relative;
+  width: 100%;
+  height: 700px;
+}
+
+.bar-info {
+  width: 100%;
+  height: 700px;
+  object-fit: cover;
 }
