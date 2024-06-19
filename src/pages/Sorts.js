@@ -6,6 +6,7 @@ import VideoPlayer from '../components/sorts/VideoPlayer';
 import SideBar from '../components/sorts/SideBar';
 import ConfirmationDialog from '../components/sorts/ConfirmationDialog';
 import CommentSection from '../components/sorts/CommentSection';
+import PopupInquiry from '../components/sorts/PopupInquiry.js';
 import '../css/sorts.css';
 
 const App = () => {
@@ -19,26 +20,27 @@ const App = () => {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(1);
     const [barData, setBarData] = useState([]);
+    const [isPopupVisible, setIsPopupVisible] = useState(false); // State for popup visibility
 
     useEffect(() => {
         getChallenges();
     }, [currentIndex]);
 
     useEffect(() => {
-        if(barData.length > 0) {
-            getComments()
+        if (barData.length > 0) {
+            getComments();
         }
-    }, [barData])
+    }, [barData]);
 
     const getChallenges = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_HOST}/api/challenges`);
             setBarData(response.data);
-            
         } catch (err) {
             console.error('Error fetching challenges:', err);
         }
     };
+
     useEffect(() => {
         const handleWheel = debounce((event) => {
             if (!commentOpen) {
@@ -47,7 +49,6 @@ const App = () => {
                 } else {
                     setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 1));
                 }
-                // getComments()
                 setCommentOpen(false);
                 setLiked(false);
                 setShowConfirmation(false);
@@ -67,14 +68,14 @@ const App = () => {
 
     const getComments = async () => {
         try {
-            // debugger
-            const numberC = (barData[currentIndex].id);
+            const numberC = barData[currentIndex].id;
             const com = await axios.get(`${process.env.REACT_APP_HOST}/api/comments/${numberC}`);
             setComments(com.data);
         } catch (err) {
             console.error('Error fetching challenges:', err);
         }
     };
+
     const incrementHeartCount = () => {
         setLiked(true);
         setBarData((prevBarData) =>
@@ -93,40 +94,38 @@ const App = () => {
     };
 
     const handleCommentSubmit = async (e) => {
-    e.preventDefault();
-    if (newComment.trim() !== '' && nickname.trim() !== '') {
-        try {
-            const payload = {
-                challenge_id: barData[currentIndex].id,
-                nickname: nickname,
-                comment: newComment,
-            };
-            console.log('Submitting comment:', payload);
-        
-            const response = await axios.post(`${process.env.REACT_APP_HOST}/api/comments`, {
-                challengeId: payload.challenge_id, 
-                nickname: payload.nickname, 
-                comment: payload.comment
-            }, {
-            });
-        
-            console.log('Response from server:', response.data);
-        
-            const updatedComments = [...comments, response.data];
-            setComments(updatedComments);
-            setNewComment('');
-            setNickname('');
-            setBarData((prevBarData) =>
-                prevBarData.map((item, index) =>
-                    index === currentIndex ? { ...item, comments: updatedComments } : item
-                )
-            );
-        } catch (err) {
-            console.error('Error adding comment:', err);
+        e.preventDefault();
+        if (newComment.trim() !== '' && nickname.trim() !== '') {
+            try {
+                const payload = {
+                    challenge_id: barData[currentIndex].id,
+                    nickname: nickname,
+                    comment: newComment,
+                };
+                console.log('Submitting comment:', payload);
+
+                const response = await axios.post(`${process.env.REACT_APP_HOST}/api/comments`, {
+                    challengeId: payload.challenge_id,
+                    nickname: payload.nickname,
+                    comment: payload.comment,
+                });
+
+                console.log('Response from server:', response.data);
+
+                const updatedComments = [...comments, response.data];
+                setComments(updatedComments);
+                setNewComment('');
+                setNickname('');
+                setBarData((prevBarData) =>
+                    prevBarData.map((item, index) =>
+                        index === currentIndex ? { ...item, comments: updatedComments } : item
+                    )
+                );
+            } catch (err) {
+                console.error('Error adding comment:', err);
+            }
         }
-        
-    }
-};
+    };
 
     const handleStartRecording = () => {
         setIsRecording(true);
@@ -139,14 +138,14 @@ const App = () => {
     const handleDeleteVideo = async (videoId, password) => {
         try {
             const videoId = barData[currentIndex].id;
-            console.log('Deleting video with ID:', videoId); // 추가 로그
+            console.log('Deleting video with ID:', videoId);
 
             const response = await axios.delete(`${process.env.REACT_APP_HOST}/api/challenges/${videoId}`, {
                 data: {
-                    password: password
-                }
+                    password: password,
+                },
             });
-            console.log('Delete response:', response); // 추가 로그
+            console.log('Delete response:', response);
 
             setBarData((prevBarData) => prevBarData.filter((_, index) => index !== currentIndex));
             setShowConfirmation(false);
@@ -158,6 +157,10 @@ const App = () => {
         }
     };
 
+    // Toggle popup visibility
+    const togglePopup = () => {
+        setIsPopupVisible(!isPopupVisible);
+    };
 
     return (
         <div className="container">
@@ -182,6 +185,7 @@ const App = () => {
                 )}
             </div>
             <ConfirmationDialog
+                setShowConfirmation={setShowConfirmation}
                 showConfirmation={showConfirmation}
                 handleTrashClick={handleTrashClick}
                 handleDeleteVideo={handleDeleteVideo}
@@ -198,9 +202,9 @@ const App = () => {
                 currentIndex={currentIndex}
                 barData={barData}
             />
-
+            {isPopupVisible && <PopupInquiry setIsPopupVisible={setIsPopupVisible}/>}
             <div className="bottom-left-buttons">
-                <button className="button">?</button>
+                <button className="button" onClick={togglePopup}>?</button>
                 {!isRecording ? (
                     <button className="button" onClick={handleStartRecording}>+</button>
                 ) : (

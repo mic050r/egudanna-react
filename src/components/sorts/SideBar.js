@@ -13,8 +13,8 @@ const SideBar = ({ videoData }) => (
             <ul className="song-list"> 
                 {
                     videoData.hashtag ? (
-                        videoData.hashtag.split(/(?=#)/).map((tag, index) => (
-                            <li key={index}>{tag}</li>
+                        videoData.hashtag.split('\/').map((tag, index) => (
+                            <li key={index}>#{tag}</li>
                         ))
                     ) : (
                         <li>No hashtags available</li>

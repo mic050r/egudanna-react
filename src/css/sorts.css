@@ -15,9 +15,11 @@ body {
   padding: 0;
   font-family: Arial, sans-serif;
 }
+
 input:focus {
   outline: none;
 }
+
 .container {
   display: flex;
   justify-content: center;
@@ -26,6 +28,7 @@ input:focus {
   position: relative;
   overflow: hidden;
 }
+
 .no-video-message {
   position: fixed;
   top: 0;
@@ -39,6 +42,7 @@ input:focus {
   font-weight: bold;
   color: #ff0099;
 }
+
 .play-video-button {
   position: absolute;
   top: 30px;
@@ -49,6 +53,7 @@ input:focus {
   border: 0;
   cursor: pointer;
 }
+
 .left-sidebar {
   position: absolute;
   bottom: 30px;
@@ -192,7 +197,7 @@ source {
   background-color: white;
 }
 
-.comment-section > div {
+.comment-section>div {
   position: relative;
   padding: 25px;
   padding-right: 35px;
@@ -209,11 +214,11 @@ source {
   box-sizing: border-box;
 }
 
-.comment-section > div::-webkit-scrollbar {
+.comment-section>div::-webkit-scrollbar {
   display: none;
 }
 
-.comment-section > button {
+.comment-section>button {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -223,7 +228,7 @@ source {
   z-index: 13;
 }
 
-.comment-section > button:hover {
+.comment-section>button:hover {
   color: #ff0099;
 }
 
@@ -238,18 +243,18 @@ source {
   gap: 2px;
 }
 
-.input-things > p {
+.input-things>p {
   width: 100%;
   overflow-wrap: break-word;
   white-space: pre-wrap;
 }
 
-.input-things > p:nth-child(1) {
+.input-things>p:nth-child(1) {
   color: #868686;
   font-size: 12px;
 }
 
-.input-things > p:nth-child(2) {
+.input-things>p:nth-child(2) {
   color: #000000;
   font-size: 15px;
 }
@@ -270,26 +275,26 @@ source {
   /* 박스 모델에 border와 padding을 포함시킴 */
 }
 
-.comment-input > p {
+.comment-input>p {
   font-size: 10px;
   color: #ff53ba;
 }
 
-.comment-input > input,
-.comment-input > * > input {
+.comment-input>input,
+.comment-input>*>input {
   border: 0;
   border-bottom: 1px solid #ff53ba;
 }
 
-.comment-input > input {
+.comment-input>input {
   width: calc(10px * 14);
 }
 
-.comment-input > * > input {
+.comment-input>*>input {
   width: 75%;
 }
 
-.comment-input > * > button {
+.comment-input>*>button {
   font-size: 11px;
   width: fit-content;
   padding: 2px 8px;
@@ -302,7 +307,7 @@ source {
   justify-content: center;
 }
 
-.comment-input > * > button:hover {
+.comment-input>*>button:hover {
   background-color: #ff53ba;
 }
 
@@ -315,7 +320,7 @@ source {
   gap: 15px;
 }
 
-.bottom-left-buttons > .button {
+.bottom-left-buttons>.button {
   width: 50px;
   height: 50px;
   padding: 2px;
@@ -399,7 +404,7 @@ source {
   color: white;
 }
 
-.trash-button > img {
+.trash-button>img {
   width: 20px;
 }
 
@@ -420,18 +425,18 @@ source {
   gap: 5px;
 }
 
-.confirmation-div > p {
+.confirmation-div>p {
   font-size: 10px;
   color: #ff53ba;
 }
 
-.confirmation-div > div {
+.confirmation-div>div {
   display: flex;
   flex-direction: row;
   gap: 10px;
 }
 
-.confirmation-div > div > button {
+.confirmation-div>div>button {
   font-size: 11px;
   width: 40px;
   padding: 2px 8px;
@@ -445,16 +450,17 @@ source {
   cursor: pointer;
 }
 
-.confirmation-div > div > button:hover {
+.confirmation-div>div>button:hover {
   background-color: #ff53ba;
 }
 
-.confirmation-div > div > input {
+.confirmation-div>div>input {
   font-size: 14px;
   width: calc(14px * 26);
   border: 0;
   border-bottom: 1px solid #ff53ba;
 }
+
 .confirmation-overlay {
   position: absolute;
   top: calc(calc(50vh - var(--sorts-main-screen-height) / 2) + 10px);
@@ -475,18 +481,18 @@ source {
   border-radius: 10px;
 }
 
-.confirmation-overlay > p {
+.confirmation-overlay>p {
   font-size: 10px;
   color: #ff53ba;
 }
 
-.confirmation-overlay > div {
+.confirmation-overlay>div {
   display: flex;
   gap: 10px;
   justify-content: space-around;
 }
 
-.confirmation-overlay > div > button {
+.confirmation-overlay>div>button {
   padding: 5px 10px;
   font-size: 13px;
   cursor: pointer;
@@ -496,7 +502,7 @@ source {
   border-radius: 5px;
 }
 
-.confirmation-overlay > div > button:hover {
+.confirmation-overlay>div>button:hover {
   background-color: hsl(324, 100%, 66%);
 }
 
@@ -510,4 +516,57 @@ source {
   width: 100%;
   height: 700px;
   object-fit: cover;
+}
+
+.popup {
+  position: absolute;
+  bottom: calc(calc(50vh - var(--sorts-main-screen-height) / 2) + 60px);
+  left: calc(calc(50vw - var(--sorts-main-screen-width) / 2) / 2);
+  width: fit-content;
+  height: fit-content;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #ff53bab6;
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 999999999;
+}
+.x{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #ff0099;
+}
+.popup-content{
+
+  display: flex;
+  justify-content: left;
+  align-items: flex-start;
+  flex-direction: column;
+  gap :10px;
+}
+label{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+  color: #ff53ba;
+}
+input{
+
+  border: none;
+  border-bottom: 1px solid #ff53ba;
+}
+
+h2{
+  color: #ff0099;
+  font-weight: 500;
+}
+
+h3{
+  position: absolute;
+  top: 37px;
+  left: 130px;
+  color: #ff53ba;
+  font-size:10%;
 }
