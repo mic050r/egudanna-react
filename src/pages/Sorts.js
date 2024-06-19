@@ -102,15 +102,12 @@ const App = () => {
                     nickname: nickname,
                     comment: newComment,
                 };
-                console.log('Submitting comment:', payload);
 
                 const response = await axios.post(`${process.env.REACT_APP_HOST}/api/comments`, {
                     challengeId: payload.challenge_id,
                     nickname: payload.nickname,
                     comment: payload.comment,
                 });
-
-                console.log('Response from server:', response.data);
 
                 const updatedComments = [...comments, response.data];
                 setComments(updatedComments);
@@ -138,14 +135,12 @@ const App = () => {
     const handleDeleteVideo = async (videoId, password) => {
         try {
             const videoId = barData[currentIndex].id;
-            console.log('Deleting video with ID:', videoId);
 
             const response = await axios.delete(`${process.env.REACT_APP_HOST}/api/challenges/${videoId}`, {
                 data: {
                     password: password,
                 },
             });
-            console.log('Delete response:', response);
 
             setBarData((prevBarData) => prevBarData.filter((_, index) => index !== currentIndex));
             setShowConfirmation(false);

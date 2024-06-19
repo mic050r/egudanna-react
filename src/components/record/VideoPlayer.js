@@ -24,10 +24,6 @@ const VideoPlayer = () => {
     `/videos/${reference_video_filename}.mp4`
   );
 
-  useEffect(() => {
-    console.log("Location state in /record component:", location.state);
-  }, [location.state]);
-
   const [recordedVideoUrl, setRecordedVideoUrl] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [uploadUrl, setUploadUrl] = useState("");
@@ -133,7 +129,6 @@ const VideoPlayer = () => {
 
     try {
       await axios.post("http://localhost:7000/api/challenges", publishData);
-      console.log("Published data:", publishData);
       alert("영상이 발송되었습니다!");
 
       // 이메일 form 데이터 형식으로 보내기
@@ -150,7 +145,6 @@ const VideoPlayer = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("Email sent successfully!");
 
       navigate("/sorts");
     } catch (error) {
