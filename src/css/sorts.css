@@ -570,3 +570,14 @@ h3{
   color: #ff53ba;
   font-size:10%;
 }
+
+
+.popup-content > button{
+  width: 100%;
+  margin-top: 10px;
+  padding: 5px;
+  background-color: #ffeef8;
+  border: 1px solid #ff53ba;
+  border-radius: 5px;
+  color: #ff0099;
+}
