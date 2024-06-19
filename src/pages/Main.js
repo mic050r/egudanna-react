@@ -12,7 +12,7 @@ import icon4 from '../img/main-icon(4).png';
 // 메인 컴포넌트
 const Main = () => {
   return (
-    <>
+    <div className="good123456789">
       <div className="container">
         <div className="title">
           <h1>이 구역의 댄싱 퀸은 나야 나</h1>
@@ -31,7 +31,7 @@ const Main = () => {
         <div className='img'></div>
         <div className='box'></div>
       </div>
-    </>
+    </div>
   );
 };
 
