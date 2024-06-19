@@ -18,13 +18,11 @@ function ChallengeRecommendationPopup({ setIsPopupVisible }) {
                     question: challengeName,
                     idol: artist,
                 };
-                console.log('Submitting challenge recommendation:', payload);
 
                 const response = await axios.post(`${process.env.REACT_APP_HOST}/api/questions`, {
                     question: challengeName,
                     idol: artist,
                 });
-                console.log('Response from server:', response.data);
                 setArtist('');
                 setChallengeName('');
                 closePopup();
