@@ -79,7 +79,7 @@ const VideoPlayer = () => {
 
         try {
           const response = await axios.post(
-            "http://localhost:7000/api/s3/upload",
+            "http://54.180.251.106/api/s3/upload",
             formData,
             {
               headers: {
@@ -128,7 +128,7 @@ const VideoPlayer = () => {
     };
 
     try {
-      await axios.post("http://localhost:7000/api/challenges", publishData);
+      await axios.post("http://54.180.251.106/api/challenges", publishData);
       alert("영상이 발송되었습니다!");
 
       // 이메일 form 데이터 형식으로 보내기
@@ -140,7 +140,7 @@ const VideoPlayer = () => {
       );
       emailData.append("body", `${data.videoUrl}`);
 
-      await axios.post("http://localhost:7000/api/mails/send", emailData, {
+      await axios.post("http://54.180.251.106:3002/api/mails/send", emailData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
