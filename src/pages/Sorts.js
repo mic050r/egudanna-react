@@ -79,15 +79,18 @@ const App = () => {
         }
     };
 
-    // const postLikes = async () => {
-    //     try{
-    //         const numberC = barData[currentIndex]?.id;
-    //         const likePlus = await axios.post(`${process.env.REACT_APP_HOST}/api/${}`)
-    //     }
-    // }
+    const postLikes = async () => {
+        try{
+            const numberC = barData[currentIndex]?.id;
+            const likePlus = await axios.post(`${process.env.REACT_APP_HOST}:3002/api/challenges/${numberC}/like`);
+        }catch(err){
+            console.log('에러!!!!!!!')
+        }
+    }
 
     const incrementHeartCount = () => {
         setLiked(true);
+        postLikes();
         setBarData((prevBarData) =>
             prevBarData.map((item, index) =>
                 index === currentIndex ? { ...item, likeNum: item.likeNum + 1 } : item
