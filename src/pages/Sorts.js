@@ -13,6 +13,7 @@ const App = () => {
     const [hoveredBar, setHoveredBar] = useState(null);
     const [commentOpen, setCommentOpen] = useState(false);
     const [liked, setLiked] = useState(false);
+    const [likeNum, setLikeNum] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [nickname, setNickname] = useState('');
@@ -78,8 +79,18 @@ const App = () => {
         }
     };
 
+    const postLikes = async () => {
+        try {
+            const numberC = barData[currentIndex]?.id;
+            const likePlus = await axios.post(`${process.env.REACT_APP_HOST}:3002/api/challenges/${numberC}/like`);
+        } catch (err) {
+            console.log('에러!!!!!!!')
+        }
+    }
+
     const incrementHeartCount = () => {
         setLiked(true);
+        postLikes();
         setBarData((prevBarData) =>
             prevBarData.map((item, index) =>
                 index === currentIndex ? { ...item, likeNum: item.likeNum + 1 } : item
@@ -94,16 +105,16 @@ const App = () => {
     const handleNicknameChange = (e) => {
         setNickname(e.target.value);
     };
-
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         if (newComment.trim() !== '' && nickname.trim() !== '') {
             try {
                 const payload = {
-                    challenge_id: barData[currentIndex].id,
+                    challengeId: barData[currentIndex].id,
                     nickname: nickname,
                     comment: newComment,
                 };
+                console.log(payload);
 
                 const response = await axios.post(`${process.env.REACT_APP_HOST}/api/comments`, payload);
 
@@ -117,7 +128,7 @@ const App = () => {
                     )
                 );
             } catch (err) {
-                console.error('Error adding comment:', err);
+                console.error('오류가 뜹니다:', err);
             }
         }
     };
@@ -130,8 +141,9 @@ const App = () => {
         setShowConfirmation(!showConfirmation);
     };
 
-    const handleDeleteVideo = async (videoId, password) => {
+    const handleDeleteVideo = async ( password) => {
         try {
+            const videoId = barData[currentIndex].id;
             const response = await axios.delete(`${process.env.REACT_APP_HOST}/api/challenges/${videoId}`, {
                 data: {
                     password: password,
