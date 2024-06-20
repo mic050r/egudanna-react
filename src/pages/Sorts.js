@@ -80,10 +80,10 @@ const App = () => {
     };
 
     const postLikes = async () => {
-        try{
+        try {
             const numberC = barData[currentIndex]?.id;
             const likePlus = await axios.post(`${process.env.REACT_APP_HOST}:3002/api/challenges/${numberC}/like`);
-        }catch(err){
+        } catch (err) {
             console.log('에러!!!!!!!')
         }
     }
@@ -115,9 +115,9 @@ const App = () => {
                     comment: newComment,
                 };
                 console.log(payload);
-    
+
                 const response = await axios.post(`${process.env.REACT_APP_HOST}/api/comments`, payload);
-    
+
                 const updatedComments = [...comments, response.data];
                 setComments(updatedComments);
                 setNewComment('');
@@ -131,7 +131,7 @@ const App = () => {
                 console.error('오류가 뜹니다:', err);
             }
         }
-    };    
+    };
 
     const handleStartRecording = () => {
         setIsRecording(true);
@@ -141,8 +141,9 @@ const App = () => {
         setShowConfirmation(!showConfirmation);
     };
 
-    const handleDeleteVideo = async (videoId, password) => {
+    const handleDeleteVideo = async ( password) => {
         try {
+            const videoId = barData[currentIndex].id;
             const response = await axios.delete(`${process.env.REACT_APP_HOST}/api/challenges/${videoId}`, {
                 data: {
                     password: password,

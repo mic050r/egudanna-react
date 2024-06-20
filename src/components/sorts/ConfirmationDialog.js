@@ -14,7 +14,7 @@ const ConfirmationDialog = ({ videoId, showConfirmation, handleDeleteVideo, setS
 
     const handleOverlayConfirmClick = () => {
         // Call the API to delete the video
-        handleDeleteVideo(videoId, password);
+        handleDeleteVideo( password);
         // Reset states and close overlay after deletion
         setPassword('');
         setShowOverlay(false);
