@@ -47,23 +47,32 @@ const App = () => {
         const handleWheel = debounce((event) => {
             if (!commentOpen) {
                 setCurrentIndex((prevIndex) => {
-                    let newIndex = event.deltaY > 0 ? prevIndex + 1 : prevIndex - 1;
-                    newIndex = Math.max(newIndex, 0); // Prevent negative index
-                    newIndex = Math.min(newIndex, barData.length - 1); // Prevent overflow index
+                    let newIndex = prevIndex; // 현재 currentIndex 값을 기본으로 설정
+    
+                    // wheel 이벤트에 따라 newIndex 조정
+                    if (event.deltaY > 0) {
+                        newIndex = Math.min(prevIndex + 1, barData.length - 1); // currentIndex를 1 증가시키되, 최대값은 barData.length - 1로 제한
+                    } else {
+                        newIndex = Math.max(prevIndex - 1, 1); // currentIndex를 1 감소시키되, 최소값은 0으로 제한
+                    }
+    
                     return newIndex;
                 });
+    
+                // 다른 상태들 초기화
                 setCommentOpen(false);
                 setLiked(false);
                 setShowConfirmation(false);
             }
         }, 200);
-
+    
         window.addEventListener('wheel', handleWheel);
-
+    
         return () => {
             window.removeEventListener('wheel', handleWheel);
         };
     }, [commentOpen, barData.length]);
+    
 
     const toggleCommentSection = () => {
         setCommentOpen(!commentOpen);
@@ -165,7 +174,6 @@ const App = () => {
     };
 
     const filteredBarData = barData.filter(video => video.title.includes(searchText));
-
     return (
         <div className="container">
             <SearchBar searchText={searchText} setSearchText={setSearchText} />
@@ -215,15 +223,15 @@ const App = () => {
                     <button className="start-recording" onClick={() => window.location.href = '/screen'}>촬영 시작하기</button>
                 )}
             </div>
-            {currentIndex < filteredBarData.length - 1 && filteredBarData[currentIndex + 1]?.videoUrl && (
+            {currentIndex < barData.length - 1 && barData[currentIndex + 1]?.videoUrl && (
                 <video
                     className="next-image-wrapper"
-                    autoPlay={hoveredBar === filteredBarData[currentIndex + 1].id}
+                    autoPlay={hoveredBar === barData[currentIndex + 1].id}
                     loop
                     muted
                     disablePictureInPicture
                 >
-                    <source src={filteredBarData[currentIndex + 1].videoUrl} type="video/mp4" />
+                    <source src={barData[currentIndex + 1].videoUrl} type="video/mp4" />
                 </video>
             )}
         </div>
