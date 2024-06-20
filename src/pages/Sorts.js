@@ -13,6 +13,7 @@ const App = () => {
     const [hoveredBar, setHoveredBar] = useState(null);
     const [commentOpen, setCommentOpen] = useState(false);
     const [liked, setLiked] = useState(false);
+    const [likeNum, setLikeNum] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [nickname, setNickname] = useState('');
@@ -78,6 +79,13 @@ const App = () => {
         }
     };
 
+    // const postLikes = async () => {
+    //     try{
+    //         const numberC = barData[currentIndex]?.id;
+    //         const likePlus = await axios.post(`${process.env.REACT_APP_HOST}/api/${}`)
+    //     }
+    // }
+
     const incrementHeartCount = () => {
         setLiked(true);
         setBarData((prevBarData) =>
@@ -94,19 +102,19 @@ const App = () => {
     const handleNicknameChange = (e) => {
         setNickname(e.target.value);
     };
-
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         if (newComment.trim() !== '' && nickname.trim() !== '') {
             try {
                 const payload = {
-                    challenge_id: barData[currentIndex].id,
+                    challengeId: barData[currentIndex].id,
                     nickname: nickname,
                     comment: newComment,
                 };
-
+                console.log(payload);
+    
                 const response = await axios.post(`${process.env.REACT_APP_HOST}/api/comments`, payload);
-
+    
                 const updatedComments = [...comments, response.data];
                 setComments(updatedComments);
                 setNewComment('');
@@ -117,10 +125,10 @@ const App = () => {
                     )
                 );
             } catch (err) {
-                console.error('Error adding comment:', err);
+                console.error('오류가 뜹니다:', err);
             }
         }
-    };
+    };    
 
     const handleStartRecording = () => {
         setIsRecording(true);
