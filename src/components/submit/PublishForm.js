@@ -18,6 +18,11 @@ const PublishForm = ({
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (!title || !nickname || !email || !password) {
+      alert("모든 필수 항목을 입력해주세요.");
+      return;
+    }
+
     if (!videoUrl) {
       console.error("Video URL is not set.");
       return;
@@ -76,7 +81,6 @@ const PublishForm = ({
             </label>
             <input
               type="password"
-              password
               value={password}
               placeholder="비밀번호를 입력해주세요."
               onChange={(e) => setPassword(e.target.value)}
@@ -104,7 +108,11 @@ const PublishForm = ({
             <button type="button" onClick={onCancel} className="cancel">
               취소
             </button>
-            <button type="submit" className="submit">
+            <button
+              type="submit"
+              className="submit"
+              disabled={!title || !nickname || !email || !password}
+            >
               공개 발행
             </button>
           </div>

@@ -66,6 +66,10 @@ const VideoPlayer = () => {
     setIsRecording(true);
   };
 
+  const handleCancel = () => {
+    navigate("/screen"); // Navigate to /screen when cancel is clicked
+  };
+
   const stopRecording = async () => {
     if (recorder) {
       recorder.stopRecording(async () => {
@@ -198,7 +202,7 @@ const VideoPlayer = () => {
           Your browser does not support the video tag.
         </video>
         <PublishForm
-          onCancel={handleCloseModal}
+          onCancel={handleCancel}
           onPublish={handlePublish}
           challenge_name={challenge_name}
           difficulty={difficulty}
