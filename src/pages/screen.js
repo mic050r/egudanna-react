@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaCheckCircle, FaRegCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/screen.css";
 import searchImage from "../img/screen/search.svg";
 import barData from "../data/reference_video_data.json";
@@ -14,6 +14,7 @@ function App() {
   const [categoryDropdownVisible, setCategoryDropdownVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const videoRefs = useRef({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleUserInteraction = () => {
@@ -128,6 +129,9 @@ function App() {
       </div>
 
       <div className="dropdown-container">
+        <button className="navigate-button" onClick={() => navigate("/sorts")}>
+          Go to Sorts
+        </button>
         <div className="difficulty-button-container">
           <button onClick={handleCategoryClick} className="difficulty-button">
             <div>{category === "All" ? "아이돌" : category}</div>{" "}
