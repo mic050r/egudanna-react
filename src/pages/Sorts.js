@@ -37,7 +37,8 @@ const App = () => {
     const getChallenges = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_HOST}/api/challenges`);
-            setBarData(response.data);
+            const sortedData = response.data.sort((a, b) => b.likeNum - a.likeNum);
+            setBarData(sortedData);
         } catch (err) {
             console.error('Error fetching challenges:', err);
         }
@@ -48,31 +49,31 @@ const App = () => {
             if (!commentOpen) {
                 setCurrentIndex((prevIndex) => {
                     let newIndex = prevIndex; // 현재 currentIndex 값을 기본으로 설정
-    
+
                     // wheel 이벤트에 따라 newIndex 조정
                     if (event.deltaY > 0) {
                         newIndex = Math.min(prevIndex + 1, barData.length - 1); // currentIndex를 1 증가시키되, 최대값은 barData.length - 1로 제한
                     } else {
                         newIndex = Math.max(prevIndex - 1, 1); // currentIndex를 1 감소시키되, 최소값은 0으로 제한
                     }
-    
+
                     return newIndex;
                 });
-    
+
                 // 다른 상태들 초기화
                 setCommentOpen(false);
                 setLiked(false);
                 setShowConfirmation(false);
             }
         }, 200);
-    
+
         window.addEventListener('wheel', handleWheel);
-    
+
         return () => {
             window.removeEventListener('wheel', handleWheel);
         };
     }, [commentOpen, barData.length]);
-    
+
 
     const toggleCommentSection = () => {
         setCommentOpen(!commentOpen);
@@ -150,7 +151,7 @@ const App = () => {
         setShowConfirmation(!showConfirmation);
     };
 
-    const handleDeleteVideo = async ( password) => {
+    const handleDeleteVideo = async (password) => {
         try {
             const videoId = barData[currentIndex].id;
             const response = await axios.delete(`${process.env.REACT_APP_HOST}/api/challenges/${videoId}`, {
