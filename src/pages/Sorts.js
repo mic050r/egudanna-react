@@ -224,17 +224,18 @@ const App = () => {
                     <button className="start-recording" onClick={() => window.location.href = '/screen'}>촬영 시작하기</button>
                 )}
             </div>
-            {currentIndex < barData.length - 1 && barData[currentIndex + 1]?.videoUrl && (
+            {currentIndex < barData.length - 1 && filteredBarData[currentIndex + 1]?.videoUrl && (
                 <video
                     className="next-image-wrapper"
-                    autoPlay={hoveredBar === barData[currentIndex + 1].id}
                     loop
                     muted
-                    disablePictureInPicture
+                    disablePictureInPicture // 이 속성이 문제가 될 수 있음
                 >
-                    <source src={barData[currentIndex + 1].videoUrl} type="video/mp4" />
+                    <source src={filteredBarData[currentIndex + 1].videoUrl} type="video/mp4" />
                 </video>
             )}
+
+
         </div>
     );
 };
