@@ -134,6 +134,8 @@ source {
   position: absolute;
   bottom: calc(var(--sorts-main-screen-height) / -2 + 70px);
   border-radius: 15px;
+  border: 1px solid #ff53ba;
+  background-color: #ffddf1;
 }
 
 .buttons {
