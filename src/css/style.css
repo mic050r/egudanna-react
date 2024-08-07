@@ -1,1 +1,6 @@
 /* styles.css */
+:root {
+  --bar-padding: 15px;
+  --main-color: #ff53ba;
+  --sub-color: #ffddf1;
+}

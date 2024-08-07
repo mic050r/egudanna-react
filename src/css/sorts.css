@@ -1,3 +1,5 @@
+@import url("style.css");
+
 :root {
   --sorts-main-screen-width: 410px;
   --sorts-main-screen-height: 700px;
@@ -134,7 +136,7 @@ source {
   position: absolute;
   bottom: calc(var(--sorts-main-screen-height) / -2 + 70px);
   border-radius: 15px;
-  border: 1px solid #ff53ba;
+  border: 1px solid var(--main-color);
   background-color: #ffddf1;
 }
 
@@ -187,7 +189,7 @@ source {
   width: 300px;
   height: var(--sorts-main-screen-height);
   background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid #ff53ba;
+  border: 1px solid var(--main-color);
   border-radius: 15px;
   box-sizing: border-box;
   display: flex;
@@ -199,7 +201,7 @@ source {
   background-color: white;
 }
 
-.comment-section>div {
+.comment-section > div {
   position: relative;
   padding: 25px;
   padding-right: 35px;
@@ -216,21 +218,21 @@ source {
   box-sizing: border-box;
 }
 
-.comment-section>div::-webkit-scrollbar {
+.comment-section > div::-webkit-scrollbar {
   display: none;
 }
 
-.comment-section>button {
+.comment-section > button {
   position: absolute;
   top: 20px;
   right: 20px;
-  color: #ff53ba;
+  color: var(--main-color);
   background-color: #00000000;
   border: 0;
   z-index: 13;
 }
 
-.comment-section>button:hover {
+.comment-section > button:hover {
   color: #ff0099;
 }
 
@@ -245,18 +247,18 @@ source {
   gap: 2px;
 }
 
-.input-things>p {
+.input-things > p {
   width: 100%;
   overflow-wrap: break-word;
   white-space: pre-wrap;
 }
 
-.input-things>p:nth-child(1) {
+.input-things > p:nth-child(1) {
   color: #868686;
   font-size: 12px;
 }
 
-.input-things>p:nth-child(2) {
+.input-things > p:nth-child(2) {
   color: #000000;
   font-size: 15px;
 }
@@ -271,32 +273,32 @@ source {
   height: 15%;
   width: 100%;
   padding: 15px;
-  border: 1px solid #ff53ba;
+  border: 1px solid var(--main-color);
   border-radius: 15px;
   box-sizing: border-box;
   /* 박스 모델에 border와 padding을 포함시킴 */
 }
 
-.comment-input>p {
+.comment-input > p {
   font-size: 10px;
-  color: #ff53ba;
+  color: var(--main-color);
 }
 
-.comment-input>input,
-.comment-input>*>input {
+.comment-input > input,
+.comment-input > * > input {
   border: 0;
-  border-bottom: 1px solid #ff53ba;
+  border-bottom: 1px solid var(--main-color);
 }
 
-.comment-input>input {
+.comment-input > input {
   width: calc(10px * 14);
 }
 
-.comment-input>*>input {
+.comment-input > * > input {
   width: 75%;
 }
 
-.comment-input>*>button {
+.comment-input > * > button {
   font-size: 11px;
   width: fit-content;
   padding: 2px 8px;
@@ -309,8 +311,8 @@ source {
   justify-content: center;
 }
 
-.comment-input>*>button:hover {
-  background-color: #ff53ba;
+.comment-input > * > button:hover {
+  background-color: var(--main-color);
 }
 
 .bottom-left-buttons {
@@ -322,13 +324,13 @@ source {
   gap: 15px;
 }
 
-.bottom-left-buttons>.button {
+.bottom-left-buttons > .button {
   width: 50px;
   height: 50px;
   padding: 2px;
   background-color: rgb(255, 255, 255);
   box-shadow: #ffddf1 0 4px 4px 1px;
-  color: #ff53ba;
+  color: var(--main-color);
 }
 
 .start-recording {
@@ -340,7 +342,7 @@ source {
   align-items: center;
   font-size: 15px;
   padding: 15px 20px;
-  background-color: #ff53ba;
+  background-color: var(--main-color);
   color: white;
   box-shadow: none;
 }
@@ -356,7 +358,7 @@ source {
   padding: 10px 20px;
   margin-bottom: 5vh;
   border-radius: 50px;
-  border: #ff53ba 1px solid;
+  border: var(--main-color) 1px solid;
   /* 2px magenta border */
 }
 
@@ -373,7 +375,7 @@ source {
   right: 10px;
   border: none;
   /* Remove default border */
-  color: #ff53ba;
+  color: var(--main-color);
   font-size: 20px;
   font-weight: bold;
   padding: 8px 10px;
@@ -406,7 +408,7 @@ source {
   color: white;
 }
 
-.trash-button>img {
+.trash-button > img {
   width: 20px;
 }
 
@@ -427,18 +429,18 @@ source {
   gap: 5px;
 }
 
-.confirmation-div>p {
+.confirmation-div > p {
   font-size: 10px;
-  color: #ff53ba;
+  color: var(--main-color);
 }
 
-.confirmation-div>div {
+.confirmation-div > div {
   display: flex;
   flex-direction: row;
   gap: 10px;
 }
 
-.confirmation-div>div>button {
+.confirmation-div > div > button {
   font-size: 11px;
   width: 40px;
   padding: 2px 8px;
@@ -452,15 +454,15 @@ source {
   cursor: pointer;
 }
 
-.confirmation-div>div>button:hover {
-  background-color: #ff53ba;
+.confirmation-div > div > button:hover {
+  background-color: var(--main-color);
 }
 
-.confirmation-div>div>input {
+.confirmation-div > div > input {
   font-size: 14px;
   width: calc(14px * 26);
   border: 0;
-  border-bottom: 1px solid #ff53ba;
+  border-bottom: 1px solid var(--main-color);
 }
 
 .confirmation-overlay {
@@ -483,18 +485,18 @@ source {
   border-radius: 10px;
 }
 
-.confirmation-overlay>p {
+.confirmation-overlay > p {
   font-size: 10px;
-  color: #ff53ba;
+  color: var(--main-color);
 }
 
-.confirmation-overlay>div {
+.confirmation-overlay > div {
   display: flex;
   gap: 10px;
   justify-content: space-around;
 }
 
-.confirmation-overlay>div>button {
+.confirmation-overlay > div > button {
   padding: 5px 10px;
   font-size: 13px;
   cursor: pointer;
@@ -504,7 +506,7 @@ source {
   border-radius: 5px;
 }
 
-.confirmation-overlay>div>button:hover {
+.confirmation-overlay > div > button:hover {
   background-color: hsl(324, 100%, 66%);
 }
 
@@ -532,54 +534,51 @@ source {
   padding: 20px;
   z-index: 999999999;
 }
-.x{
+.x {
   position: absolute;
   right: 10px;
   top: 10px;
   color: #ff0099;
 }
-.popup-content{
-
+.popup-content {
   display: flex;
   justify-content: left;
   align-items: flex-start;
   flex-direction: column;
-  gap :10px;
+  gap: 10px;
 }
-label{
+label {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   gap: 10px;
-  color: #ff53ba;
+  color: var(--main-color);
 }
-input{
-
+input {
   border: none;
-  border-bottom: 1px solid #ff53ba;
+  border-bottom: 1px solid var(--main-color);
 }
 
-h2{
+h2 {
   color: #ff0099;
   font-weight: 500;
 }
 
-h3{
+h3 {
   position: absolute;
   top: 37px;
   left: 130px;
-  color: #ff53ba;
-  font-size:10%;
+  color: var(--main-color);
+  font-size: 10%;
 }
 
-
-.popup-content > button{
+.popup-content > button {
   width: 100%;
   margin-top: 10px;
   padding: 5px;
   background-color: #ffeef8;
-  border: 1px solid #ff53ba;
+  border: 1px solid var(--main-color);
   border-radius: 5px;
   color: #ff0099;
 }
